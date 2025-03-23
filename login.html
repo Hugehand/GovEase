@@ -7,22 +7,76 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .bg-image {
-            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&q=80&w=1650');
-            background-size: cover;
-            background-position: center;
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            background-color: #1a365d;
         }
+        
+        .particles-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(to bottom, #1a365d, #2a4365);
+        }
+        
+        .content-container {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .gov-header {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .gov-header h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gov-decoration {
+            width: 100px;
+            height: 4px;
+            background: #f0f0f0;
+            margin-top: 8px;
+            border-radius: 2px;
+        }
+        
         .gov-logo {
             width: 80px;
             height: 80px;
-            background-color: #1e40af;
+            background-image: url('img/b8d95d52-2583-4d11-944c-0e229c96f017.jpg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 24px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             position: relative;
             margin: 0 auto 1.5rem;
@@ -35,83 +89,149 @@
             border: 2px solid rgba(255, 255, 255, 0.5);
             border-radius: 50%;
         }
+        
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+        }
     </style>
 </head>
-<body class="bg-image h-screen flex items-center justify-center">
-    <div class="container mx-auto px-4">
-        <div class="max-w-lg mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:flex">
-            <div class="w-full p-8">
-                <div class="text-center mb-8">
-                    <div class="gov-logo">政务</div>
-                    <h1 class="text-2xl font-bold text-gray-800 mb-2">政务办公系统</h1>
-                    <p class="text-gray-600">专业高效的政务办公平台</p>
-                </div>
-                
-                <div id="loginForm">
-                    <div class="mb-5">
-                        <label for="username" class="block text-gray-700 text-sm font-medium mb-2">用户名</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-user text-gray-400"></i>
-                            </div>
-                            <input id="username" type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="请输入用户名">
+<body>
+    <div class="particles-container" id="particles-js"></div>
+    
+    <div class="gov-header">
+        <h1>中华人民共和国政务办公系统</h1>
+        <div class="gov-decoration"></div>
+    </div>
+    
+    <div class="content-container">
+        <div class="login-container">
+            <div class="text-center mb-8">
+                <div class="gov-logo"></div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">用户登录</h2>
+                <p class="text-gray-600">专业高效的政务办公平台</p>
+            </div>
+            
+            <div id="loginForm">
+                <div class="mb-5">
+                    <label for="username" class="block text-gray-700 text-sm font-medium mb-2">用户名</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
                         </div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <label for="password" class="block text-gray-700 text-sm font-medium mb-2">密码</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-lock text-gray-400"></i>
-                            </div>
-                            <input id="password" type="password" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="请输入密码">
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center justify-between mt-4">
-                        <div class="flex items-center">
-                            <input id="remember_me" name="remember_me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="remember_me" class="ml-2 block text-sm text-gray-900">记住我</label>
-                        </div>
-                        
-                        <div class="text-sm">
-                            <a href="forgot-password.html" class="font-medium text-blue-600 hover:text-blue-500">忘记密码?</a>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <button id="loginBtn" type="button" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            登录
-                        </button>
-                    </div>
-                    
-                    <div id="loginError" class="mt-4 text-center text-sm text-red-600 hidden">
-                        用户名或密码错误，请重试！
-                    </div>
-                    
-                    <!-- 测试账号信息 -->
-                    <div class="mt-6 p-4 bg-gray-50 rounded-md">
-                        <h4 class="text-sm font-medium text-gray-700 mb-2">测试账号：</h4>
-                        <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                            <div>用户名：</div>
-                            <div class="font-medium">admin</div>
-                            <div>密码：</div>
-                            <div class="font-medium">admin123</div>
-                        </div>
+                        <input id="username" type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="请输入用户名">
                     </div>
                 </div>
                 
-                <div class="mt-6 text-center text-sm">
-                    <p class="text-gray-600">
-                        © 2025 政务办公系统 版权所有
-                    </p>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 text-sm font-medium mb-2">密码</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input id="password" type="password" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="请输入密码">
+                    </div>
                 </div>
+                
+                <div class="flex items-center justify-between mt-4">
+                    <div class="flex items-center">
+                        <input id="remember_me" name="remember_me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="remember_me" class="ml-2 block text-sm text-gray-900">记住我</label>
+                    </div>
+                    
+                    <div class="text-sm">
+                        <a href="forgot-password.html" class="font-medium text-blue-600 hover:text-blue-500">忘记密码?</a>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button id="loginBtn" type="button" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        登录
+                    </button>
+                </div>
+                
+                <div id="loginError" class="mt-4 text-center text-sm text-red-600 hidden">
+                    用户名或密码错误，请重试！
+                </div>
+                
+                <!-- 测试账号信息 -->
+                <div class="mt-6 p-4 bg-gray-50 rounded-md">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">测试账号：</h4>
+                    <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                        <div>用户名：</div>
+                        <div class="font-medium">admin</div>
+                        <div>密码：</div>
+                        <div class="font-medium">admin123</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center text-sm">
+                <p class="text-gray-600">
+                    © 2025 政务办公系统 版权所有
+                </p>
             </div>
         </div>
     </div>
     
     <script>
+        // 粒子动画效果
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles-js');
+            const particleCount = 80;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // 随机大小
+                const size = Math.floor(Math.random() * 6) + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // 随机位置
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                
+                // 随机透明度
+                const opacity = Math.random() * 0.5;
+                particle.style.opacity = opacity;
+                
+                // 随机移动动画
+                const animDuration = (Math.random() * 20) + 10;
+                particle.style.animation = `moveParticle ${animDuration}s infinite ease-in-out`;
+                
+                // 添加到容器
+                particlesContainer.appendChild(particle);
+                
+                // 给每个粒子一个随机的移动方向
+                const translateX = (Math.random() - 0.5) * 30;
+                const translateY = (Math.random() - 0.5) * 30;
+                particle.animate([
+                    { transform: `translate(0, 0)` },
+                    { transform: `translate(${translateX}px, ${translateY}px)` },
+                    { transform: `translate(0, 0)` }
+                ], {
+                    duration: animDuration * 1000,
+                    iterations: Infinity,
+                    direction: 'alternate',
+                    easing: 'ease-in-out'
+                });
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
+            // 创建动态背景粒子
+            createParticles();
+            
             // 预设的用户名和密码
             const correctUsername = 'admin';
             const correctPassword = 'admin123';

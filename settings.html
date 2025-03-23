@@ -21,26 +21,31 @@
         }
         
         .dark-mode .bg-white {
-            background-color: #2d3748 !important;
+            background-color: #374151 !important;
         }
         
         .dark-mode .bg-gray-100 {
             background-color: #1a202c !important;
         }
         
-        .dark-mode .text-gray-800, 
+        .dark-mode .text-gray-800 {
+            color: #F3F4F6 !important;
+        }
+        
         .dark-mode .text-gray-700 {
-            color: #e2e8f0 !important;
+            color: #E5E7EB !important;
         }
         
-        .dark-mode .text-gray-600, 
+        .dark-mode .text-gray-600 {
+            color: #D1D5DB !important;
+        }
+        
         .dark-mode .text-gray-500 {
-            color: #a0aec0 !important;
+            color: #9CA3AF !important;
         }
         
-        .dark-mode .border-gray-200, 
-        .dark-mode .border-gray-300 {
-            border-color: #4a5568 !important;
+        .dark-mode .border-gray-200 {
+            border-color: #4B5563 !important;
         }
         
         .dark-mode input, 
@@ -56,15 +61,39 @@
         }
         
         .dark-mode .bg-gray-50 {
-            background-color: #374151 !important;
+            background-color: #4B5563 !important;
         }
         
         .dark-mode table thead {
-            background-color: #374151 !important;
+            background-color: #4B5563 !important;
         }
         
         .dark-mode table tbody tr {
             background-color: #2d3748 !important;
+        }
+        
+        .gov-logo {
+            width: 40px;
+            height: 40px;
+            background-image: url('img/b8d95d52-2583-4d11-944c-0e229c96f017.jpg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-right: 12px;
+        }
+        .gov-logo::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
         }
     </style>
     <!-- 系统Logo生成脚本 - 所有页面共享 -->
@@ -178,48 +207,6 @@
                     }
                 }
             });
-            
-            // 应用Logo到关于系统页面（如果存在）
-            const aboutSystemLogo = document.querySelector('#about-system .flex.flex-col.items-center img');
-            if (aboutSystemLogo) {
-                const parentElement = aboutSystemLogo.parentElement;
-                let logoContainer = document.getElementById('aboutSystemLogoContainer');
-                
-                if (!logoContainer) {
-                    logoContainer = document.createElement('div');
-                    logoContainer.className = 'w-24 h-24 mb-4';
-                    logoContainer.id = 'aboutSystemLogoContainer';
-                    
-                    // 根据主题获取颜色
-                    let primaryColor = "#3B82F6"; // 默认蓝色
-                    let bgColor = "#EFF6FF";
-                    
-                    switch(currentTheme) {
-                        case 'green':
-                            primaryColor = "#10B981";
-                            bgColor = "#ECFDF5";
-                            break;
-                        case 'purple':
-                            primaryColor = "#8B5CF6";
-                            bgColor = "#F3F4F6";
-                            break;
-                        case 'red':
-                            primaryColor = "#EF4444";
-                            bgColor = "#FEF2F2";
-                            break;
-                        case 'dark':
-                            primaryColor = "#4B5563";
-                            bgColor = "#F9FAFB";
-                            break;
-                    }
-                    
-                    const logo = generateSystemLogo(primaryColor, bgColor, 120);
-                    logoContainer.appendChild(logo);
-                    
-                    // 替换原始的img元素
-                    parentElement.replaceChild(logoContainer, aboutSystemLogo);
-                }
-            }
         }
 
         // 更新指定主题的Logo颜色
@@ -281,9 +268,7 @@
         <aside class="w-64 bg-blue-800 text-white shadow-lg hidden md:block">
             <div class="p-4 border-b border-blue-700">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 mr-3 relative" id="sidebarLogo">
-                        <!-- Logo将在JavaScript中生成并插入 -->
-                    </div>
+                    <div class="gov-logo"></div>
                     <h1 class="text-xl font-bold">政务办公系统</h1>
                 </div>
             </div>
@@ -870,7 +855,7 @@
                                 </div>
                                 <div class="p-6">
                                     <div class="flex flex-col items-center mb-6">
-                                        <img src="https://via.placeholder.com/120x120?text=Logo" alt="系统Logo" class="w-24 h-24 mb-4">
+                                        <img src="img/b8d95d52-2583-4d11-944c-0e229c96f017.jpg" alt="系统Logo" class="w-24 h-24 mb-4">
                                         <h3 class="text-xl font-bold text-gray-800">政务办公系统</h3>
                                         <p class="text-sm text-gray-600">版本 2.5.8 (2025021501)</p>
                                     </div>
@@ -930,11 +915,11 @@
                                         <div class="space-y-2">
                                             <div class="flex text-sm">
                                                 <span class="text-gray-600 w-20">技术支持：</span>
-                                                <span class="text-blue-600">support@gov-system.cn</span>
+                                                <span class="text-blue-600">1733369442@qq.com</span>
                                             </div>
                                             <div class="flex text-sm">
                                                 <span class="text-gray-600 w-20">服务热线：</span>
-                                                <span class="text-gray-800">400-888-9999</span>
+                                                <span class="text-gray-800">xxx-xxx-xxxx</span>
                                             </div>
                                             <div class="flex text-sm">
                                                 <span class="text-gray-600 w-20">工作时间：</span>
