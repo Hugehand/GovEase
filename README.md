@@ -221,6 +221,8 @@ Developing and maintaining this Government Office Automation System requires sig
    **Financial support** - If you'd like to provide financial support, you can do so via:
 
    - WeChat Pay:
+   ![本地图片](./img/image.png)
+
    
 
 ### 联系作者 (Contact the Author)
