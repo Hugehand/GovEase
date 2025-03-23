@@ -212,21 +212,15 @@
 
    - 微信支付: 
      
-     <img src="https://example.com/wechat_qrcode.jpg" alt="微信支付二维码" width="200"/>
+     
      
    - 支付宝: 
      
-     <img src="https://example.com/alipay_qrcode.jpg" alt="支付宝二维码" width="200"/>
-     
-   - PayPal: developer@gov-system.example.com
-
 ### 联系作者
 
 如有任何问题或合作意向，请通过以下方式联系我们：
 
-- 电子邮箱: developer@gov-system.example.com
-- 微信: GovSystem-Dev
-- GitHub: github.com/example/government-office-system
+- 微信: 1733369442@qq.com
 
 感谢您的支持！
 
