@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公文详情 - 政务办公系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gov-logo {
+            width: 40px;
+            height: 40px;
+            background-color: #1e40af;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-right: 12px;
+        }
+        .gov-logo::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+        .approval-flow-item {
+            position: relative;
+        }
+        .approval-flow-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 14px;
+            width: 2px;
+            height: calc(100% - 10px);
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex min-h-screen">
+        <!-- 侧边栏导航 -->
+        <aside class="w-64 bg-blue-800 text-white shadow-lg hidden md:block">
+            <div class="p-4 border-b border-blue-700">
+                <div class="flex items-center">
+                    <div class="gov-logo">政务</div>
+                    <h1 class="text-xl font-bold">政务办公系统</h1>
+                </div>
+            </div>
+            <nav class="py-4">
+                <div class="px-4 py-2 text-blue-200 text-xs uppercase tracking-wider">主菜单</div>
+                <a href="dashboard.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tachometer-alt w-5 text-center mr-2"></i>
+                    <span>个人工作台</span>
+                </a>
+                <a href="document-flow.html" class="flex items-center px-4 py-3 text-white bg-blue-900 bg-opacity-50">
+                    <i class="fas fa-file-signature w-5 text-center mr-2"></i>
+                    <span>公文处理</span>
+                </a>
+                <a href="document-mgmt.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-folder w-5 text-center mr-2"></i>
+                    <span>文档管理</span>
+                </a>
+                <a href="meeting.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-calendar-alt w-5 text-center mr-2"></i>
+                    <span>会议管理</span>
+                </a>
+                <a href="announcement.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-bullhorn w-5 text-center mr-2"></i>
+                    <span>通知公告</span>
+                </a>
+                <a href="task.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tasks w-5 text-center mr-2"></i>
+                    <span>任务管理</span>
+                </a>
+                <a href="attendance.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-user-clock w-5 text-center mr-2"></i>
+                    <span>考勤管理</span>
+                </a>
+                <a href="organization.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-sitemap w-5 text-center mr-2"></i>
+                    <span>组织架构</span>
+                </a>
+                <a href="settings.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-cog w-5 text-center mr-2"></i>
+                    <span>系统设置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主要内容区域 -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between px-6 py-3">
+                    <div class="flex items-center">
+                        <button class="text-gray-500 focus:outline-none md:hidden">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="flex items-center">
+                            <h2 class="text-lg font-medium text-gray-800 ml-4">公文处理</h2>
+                            <span class="mx-2 text-gray-500">/</span>
+                            <h2 class="text-lg font-medium text-blue-600" id="docTypeTitle">公文详情</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="flex mx-4 text-gray-600 focus:outline-none">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="absolute top-0 right-0 h-4 w-4 mt-1 mr-2 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
+                        </button>
+                        <div class="relative">
+                            <button id="userMenuBtn" class="relative z-10 block h-8 w-8 rounded-full overflow-hidden focus:outline-none">
+                                <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Your avatar">
+                            </button>
+                            <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">账号设置</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">帮助中心</a>
+                                <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 内容区域 -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="container mx-auto">
+                    <!-- 操作按钮 -->
+                    <div class="flex justify-between mb-6">
+                        <div>
+                            <button onclick="window.history.back()" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <i class="fas fa-arrow-left mr-2"></i> 返回
+                            </button>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <i class="fas fa-print mr-2"></i> 打印
+                            </button>
+                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <i class="fas fa-download mr-2"></i> 下载
+                            </button>
+                            <button id="approvalBtn" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <i class="fas fa-check-circle mr-2"></i> 去审批
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 公文详情 -->
+                    <div class="bg-white shadow-sm rounded-lg mb-6">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-medium text-gray-800">公文详情</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="md:col-span-2">
+                                    <h2 id="docTitle" class="text-xl font-bold text-gray-900 mb-4">关于2025年城市建设规划方案的批复</h2>
+                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                        <div>
+                                            <p class="text-sm text-gray-500">文号</p>
+                                            <p id="docNumber" class="text-base text-gray-800">冀政办发〔2025〕15号</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">公文类型</p>
+                                            <p id="docCategory" class="text-base text-gray-800">收文</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">发文单位</p>
+                                            <p id="docSender" class="text-base text-gray-800">市政府办公厅</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">接收单位</p>
+                                            <p id="docReceiver" class="text-base text-gray-800">各区县政府、市直各部门</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">紧急程度</p>
+                                            <p id="docUrgency" class="text-base text-gray-800">特急</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">发送时间</p>
+                                            <p id="docSendTime" class="text-base text-gray-800">2025-03-20 09:25</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h4 class="font-medium text-gray-700 mb-3">附件列表</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <i class="far fa-file-pdf text-red-500 mr-2"></i>
+                                                <span class="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">城市建设规划方案.pdf</span>
+                                            </div>
+                                            <span class="text-xs text-gray-500">2.5MB</span>
+                                        </li>
+                                        <li class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <i class="far fa-file-excel text-green-500 mr-2"></i>
+                                                <span class="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">项目明细表.xlsx</span>
+                                            </div>
+                                            <span class="text-xs text-gray-500">1.8MB</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <h4 class="font-medium text-gray-700 mb-3">公文内容</h4>
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <p class="text-sm text-gray-800 leading-relaxed" id="docContent">
+                                        各区县人民政府，市政府各部门：<br><br>
+                                        
+                                        为落实国家城市更新战略，优化城市功能布局，提升城市品质和居民生活质量，市规划局会同相关部门编制了《2025年城市建设规划方案》（以下简称《方案》）。《方案》以打造智慧宜居城市为目标，统筹考虑城市基础设施建设、生态环境保护、历史文化传承、产业转型升级等因素，提出了近期城市建设的主要任务和实施路径。经市政府常务会议研究，现批复如下：<br><br>
+                                        
+                                        一、原则同意《方案》提出的城市建设总体布局和重点建设项目安排。各地区、各部门要按照《方案》确定的目标任务，统筹推进各项工作落实。<br><br>
+                                        
+                                        二、强化规划引领作用，严格规划执行和管控，优化城市空间布局，加快推进城市有机更新。<br><br>
+                                        
+                                        三、加快城市基础设施建设，完善综合交通体系，推进水电气热等市政设施建设和改造，提升城市综合承载能力。<br><br>
+                                        
+                                        四、大力推进智慧城市建设，加强城市数字化转型，提升城市治理智能化水平。<br><br>
+                                        
+                                        五、坚持以人为本，注重改善民生，加强公共服务设施建设，增强群众获得感、幸福感。<br><br>
+                                        
+                                        各地区、各部门要加强组织领导，落实工作责任，确保《方案》确定的各项任务顺利实施。市规划局要会同相关部门加强跟踪分析和监督指导，重大事项及时向市政府报告。<br><br>
+                                        
+                                        特此批复。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 处理记录 -->
+                    <div class="bg-white shadow-sm rounded-lg mb-6">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-medium text-gray-800">处理记录</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="approval-flow-item pl-8 relative">
+                                    <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center absolute left-0 top-0 z-10">
+                                        <i class="fas fa-file-alt text-xs"></i>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <div class="flex justify-between">
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-800">王明</span>
+                                                <span class="text-xs text-gray-500 ml-2">提交了公文</span>
+                                            </div>
+                                            <span class="text-xs text-gray-500">2025-03-20 09:25</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mt-1">创建公文并提交审批</p>
+                                    </div>
+                                </div>
+                                <div class="approval-flow-item pl-8 relative">
+                                    <div class="w-6 h-6 rounded-full bg-yellow-100 text-yellow-500 flex items-center justify-center absolute left-0 top-0 z-10">
+                                        <i class="fas fa-clock text-xs"></i>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <div class="flex justify-between">
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-800">张三</span>
+                                                <span class="text-xs text-gray-500 ml-2">待审批</span>
+                                            </div>
+                                            <span class="text-xs text-gray-500">2025-03-20 10:15</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mt-1">当前正在等待部门领导审批</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 相关公文 -->
+                    <div class="bg-white shadow-sm rounded-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-medium text-gray-800">相关公文</h3>
+                        </div>
+                        <div class="p-6">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            文号/标题
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            类型
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            发送时间
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            状态
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">冀政办发〔2025〕12号</div>
+                                                <div class="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">关于加强数字政府建设的实施意见</div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            收文
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            2025-03-18 11:15
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                已办结
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-gray-600 hover:text-gray-900">查看</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">冀政办发〔2024〕24号</div>
+                                                <div class="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">关于印发2024年城市建设规划的通知</div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            收文
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            2024-03-15 10:30
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                已办结
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-gray-600 hover:text-gray-900">查看</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn || isLoggedIn !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // 获取URL参数
+            const params = new URLSearchParams(window.location.search);
+            const docId = params.get('id');
+            const docType = params.get('type');
+            
+            // 根据文档类型设置页面内容
+            if (docType) {
+                updateDocTypeTitle(docType);
+                loadDocumentData(docId, docType);
+            }
+            
+            // 用户菜单交互
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (userMenuBtn && userMenu) {
+                userMenuBtn.addEventListener('click', function() {
+                    userMenu.classList.toggle('hidden');
+                });
+                
+                // 点击其他地方关闭菜单
+                document.addEventListener('click', function(event) {
+                    if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
+                        userMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // 去审批按钮事件
+            const approvalBtn = document.getElementById('approvalBtn');
+            
+            if (approvalBtn) {
+                approvalBtn.addEventListener('click', function() {
+                    window.location.href = `doc-approval.html?id=${docId}&type=${docType}`;
+                });
+            }
+            
+            // 退出登录
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('username');
+                    window.location.href = 'login.html';
+                });
+            }
+        });
+        
+        // 更新公文类型标题
+        function updateDocTypeTitle(docType) {
+            const docTypeTitle = document.getElementById('docTypeTitle');
+            if (docTypeTitle) {
+                switch(docType) {
+                    case 'receiving':
+                        docTypeTitle.textContent = '收文详情';
+                        break;
+                    case 'sending':
+                        docTypeTitle.textContent = '发文详情';
+                        break;
+                    case 'signing':
+                        docTypeTitle.textContent = '签报详情';
+                        break;
+                    default:
+                        docTypeTitle.textContent = '公文详情';
+                }
+            }
+        }
+        
+        // 加载文档数据
+        function loadDocumentData(docId, docType) {
+            // 这里应该是从服务器获取数据，现在模拟不同类型的数据
+            let docData = {};
+            
+            if (docType === 'receiving') {
+                if (docId === '1') {
+                    docData = {
+                        title: '关于2025年城市建设规划方案的批复',
+                        number: '冀政办发〔2025〕15号',
+                        category: '收文',
+                        sender: '市政府办公厅',
+                        receiver: '各区县政府、市直各部门',
+                        urgency: '特急',
+                        sendTime: '2025-03-20 09:25'
+                    };
+                }
+            } else if (docType === 'sending') {
+                if (docId === '101') {
+                    docData = {
+                        title: '关于加快推进智慧城市建设的实施方案',
+                        number: '城建发〔2025〕18号',
+                        category: '发文',
+                        sender: '市建设局',
+                        receiver: '各区县政府、市直相关部门',
+                        urgency: '特急',
+                        sendTime: '2025-03-22 14:30'
+                    };
+                }
+            } else if (docType === 'signing') {
+                if (docId === '201') {
+                    docData = {
+                        title: '关于申请增加智慧城市管理平台建设经费的请示',
+                        number: '城建签〔2025〕8号',
+                        category: '签报',
+                        sender: '信息化建设处',
+                        receiver: '市财政局',
+                        urgency: '特急',
+                        sendTime: '2025-03-23 10:15'
+                    };
+                }
+            }
+            
+            // 更新页面数据
+            updatePageData(docData);
+        }
+        
+        // 更新页面数据
+        function updatePageData(data) {
+            if (Object.keys(data).length === 0) return;
+            
+            document.getElementById('docTitle').textContent = data.title || '';
+            document.getElementById('docNumber').textContent = data.number || '';
+            document.getElementById('docCategory').textContent = data.category || '';
+            document.getElementById('docSender').textContent = data.sender || '';
+            document.getElementById('docReceiver').textContent = data.receiver || '';
+            document.getElementById('docUrgency').textContent = data.urgency || '';
+            document.getElementById('docSendTime').textContent = data.sendTime || '';
+        }
+    </script>
+</body>
+</html> 

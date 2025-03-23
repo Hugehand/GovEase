@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通知公告 - 政务办公系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex min-h-screen">
+        <!-- 侧边栏导航 -->
+        <aside class="w-64 bg-blue-800 text-white shadow-lg hidden md:block">
+            <div class="p-4 border-b border-blue-700">
+                <div class="flex items-center">
+                    <img src="https://via.placeholder.com/40x40?text=Logo" alt="Logo" class="w-10 h-10 mr-3">
+                    <h1 class="text-xl font-bold">政务办公系统</h1>
+                </div>
+            </div>
+            <nav class="py-4">
+                <div class="px-4 py-2 text-blue-200 text-xs uppercase tracking-wider">主菜单</div>
+                <a href="dashboard.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tachometer-alt w-5 text-center mr-2"></i>
+                    <span>个人工作台</span>
+                </a>
+                <a href="document-flow.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-file-signature w-5 text-center mr-2"></i>
+                    <span>公文处理</span>
+                </a>
+                <a href="document-mgmt.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-folder w-5 text-center mr-2"></i>
+                    <span>文档管理</span>
+                </a>
+                <a href="meeting.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-calendar-alt w-5 text-center mr-2"></i>
+                    <span>会议管理</span>
+                </a>
+                <a href="announcement.html" class="flex items-center px-4 py-3 text-white bg-blue-900 bg-opacity-50">
+                    <i class="fas fa-bullhorn w-5 text-center mr-2"></i>
+                    <span>通知公告</span>
+                </a>
+                <a href="task.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tasks w-5 text-center mr-2"></i>
+                    <span>任务管理</span>
+                </a>
+                <a href="attendance.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-user-clock w-5 text-center mr-2"></i>
+                    <span>考勤管理</span>
+                </a>
+                <a href="organization.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-sitemap w-5 text-center mr-2"></i>
+                    <span>组织架构</span>
+                </a>
+                <a href="settings.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-cog w-5 text-center mr-2"></i>
+                    <span>系统设置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主要内容区域 -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between px-6 py-3">
+                    <div class="flex items-center">
+                        <button class="text-gray-500 focus:outline-none md:hidden">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h2 class="text-lg font-medium text-gray-800 ml-4">通知公告</h2>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="flex mx-4 text-gray-600 focus:outline-none">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="absolute top-0 right-0 h-4 w-4 mt-1 mr-2 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
+                        </button>
+                        <button id="userMenuBtn" class="relative z-10 block h-8 w-8 rounded-full overflow-hidden focus:outline-none">
+                            <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Your avatar">
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 内容区域 -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="container mx-auto">
+                    <!-- 操作栏 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center shadow-sm">
+                                    <i class="fas fa-plus mr-2"></i> 发布公告
+                                </button>
+                                <div class="flex">
+                                    <button class="px-4 py-2 bg-blue-50 border border-blue-200 text-blue-600 rounded-l-md">全部公告</button>
+                                    <button class="px-4 py-2 hover:bg-gray-50 border-t border-b border-gray-200 text-gray-700">部门公告</button>
+                                    <button class="px-4 py-2 hover:bg-gray-50 border border-gray-200 text-gray-700 rounded-r-md">我的发布</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center w-full md:w-auto">
+                                <div class="relative flex-grow md:flex-grow-0">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                                        <i class="fas fa-search text-gray-500"></i>
+                                    </span>
+                                    <input class="form-input w-full md:w-64 rounded-md pl-10 py-2 border border-gray-300" type="text" placeholder="搜索公告...">
+                                </div>
+                                <button class="ml-2 bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-md">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- 左侧公告列表 -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                                <div class="p-4 border-b border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800">公告列表</h3>
+                                </div>
+                                <div>
+                                    <!-- 未读公告 -->
+                                    <a href="#" class="block border-l-4 border-blue-500 bg-blue-50 p-4 hover:bg-blue-100">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">关于开展2025年度政府部门绩效考核的通知</h4>
+                                                <p class="text-sm text-gray-600 mt-1 line-clamp-2">将于4月1日开始进行年度绩效考核工作，请各部门做好准备。各部门负责人需要提前准备相关材料...</p>
+                                                <div class="flex items-center mt-2 text-xs text-gray-500">
+                                                    <span>人事部</span>
+                                                    <span class="mx-2">|</span>
+                                                    <span>2025-03-20</span>
+                                                </div>
+                                            </div>
+                                            <span class="bg-red-500 h-2 w-2 rounded-full mt-2"></span>
+                                        </div>
+                                    </a>
+                                    
+                                    <!-- 未读公告2 -->
+                                    <a href="#" class="block border-l-4 border-blue-500 p-4 hover:bg-gray-50">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">关于加强网络安全管理的通知</h4>
+                                                <p class="text-sm text-gray-600 mt-1 line-clamp-2">请各部门严格遵守网络安全管理规定，定期更换密码。为保障政府网络安全，信息安全处将定期...</p>
+                                                <div class="flex items-center mt-2 text-xs text-gray-500">
+                                                    <span>信息安全处</span>
+                                                    <span class="mx-2">|</span>
+                                                    <span>2025-03-18</span>
+                                                </div>
+                                            </div>
+                                            <span class="bg-red-500 h-2 w-2 rounded-full mt-2"></span>
+                                        </div>
+                                    </a>
+                                    
+                                    <!-- 已读公告 -->
+                                    <a href="#" class="block border-l-4 border-gray-300 p-4 hover:bg-gray-50">
+                                        <div>
+                                            <h4 class="font-medium text-gray-800">2025年清明节放假安排</h4>
+                                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">根据国家规定，4月4日至6日放假调休，共3天。4月7日（星期一）正常上班。请各部门合理安排...</p>
+                                            <div class="flex items-center mt-2 text-xs text-gray-500">
+                                                <span>行政办公室</span>
+                                                <span class="mx-2">|</span>
+                                                <span>2025-03-15</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="#" class="block border-l-4 border-gray-300 p-4 hover:bg-gray-50">
+                                        <div>
+                                            <h4 class="font-medium text-gray-800">关于组织开展全市公务员培训的通知</h4>
+                                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">为提升全市公务员队伍素质，将于4月15日至4月30日分批次开展全市公务员培训工作...</p>
+                                            <div class="flex items-center mt-2 text-xs text-gray-500">
+                                                <span>人事部</span>
+                                                <span class="mx-2">|</span>
+                                                <span>2025-03-12</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="#" class="block border-l-4 border-gray-300 p-4 hover:bg-gray-50">
+                                        <div>
+                                            <h4 class="font-medium text-gray-800">关于加强政府采购管理的规定</h4>
+                                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">为进一步规范政府采购行为，提高采购效率和透明度，现就加强政府采购管理工作通知如下...</p>
+                                            <div class="flex items-center mt-2 text-xs text-gray-500">
+                                                <span>财政部</span>
+                                                <span class="mx-2">|</span>
+                                                <span>2025-03-10</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="#" class="block border-l-4 border-gray-300 p-4 hover:bg-gray-50">
+                                        <div>
+                                            <h4 class="font-medium text-gray-800">关于开展城市环境卫生整治行动的通知</h4>
+                                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">为提升我市城市环境品质，创造整洁、优美的城市环境，决定自4月起，在全市范围内开展...</p>
+                                            <div class="flex items-center mt-2 text-xs text-gray-500">
+                                                <span>城市管理局</span>
+                                                <span class="mx-2">|</span>
+                                                <span>2025-03-08</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                
+                                <!-- 分页 -->
+                                <div class="p-4 border-t border-gray-200 flex items-center justify-between">
+                                    <div class="text-sm text-gray-500">
+                                        共 <span class="font-medium">36</span> 条公告
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">上一页</button>
+                                        <button class="px-3 py-1 border border-gray-300 rounded-md bg-blue-50 text-blue-600 font-medium">1</button>
+                                        <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">2</button>
+                                        <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">3</button>
+                                        <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">下一页</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧公告详情 -->
+                        <div class="lg:col-span-2">
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                                <div class="p-6 border-b border-gray-200">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-2xl font-bold text-gray-800">关于开展2025年度政府部门绩效考核的通知</h2>
+                                        <div class="flex space-x-2">
+                                            <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+                                                <i class="fas fa-star"></i>
+                                            </button>
+                                            <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+                                                <i class="fas fa-print"></i>
+                                            </button>
+                                            <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+                                                <i class="fas fa-share-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                                        <div class="flex items-center mr-4">
+                                            <i class="fas fa-building mr-1"></i>
+                                            <span>发布部门：人事部</span>
+                                        </div>
+                                        <div class="flex items-center mr-4">
+                                            <i class="fas fa-user mr-1"></i>
+                                            <span>发布人：王人事</span>
+                                        </div>
+                                        <div class="flex items-center mr-4">
+                                            <i class="fas fa-calendar-alt mr-1"></i>
+                                            <span>发布日期：2025-03-20</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-eye mr-1"></i>
+                                            <span>浏览次数：158</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">通知</span>
+                                        <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">重要</span>
+                                        <span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">绩效考核</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-6 text-gray-700 leading-relaxed">
+                                    <p class="mb-4">各部门：</p>
+                                    
+                                    <p class="mb-4">为全面推进我市政务工作高质量发展，根据市委市政府有关工作部署，现就开展2025年度政府部门绩效考核工作通知如下：</p>
+                                    
+                                    <h3 class="text-lg font-semibold mb-2 mt-6">一、考核目的</h3>
+                                    <p class="mb-4">通过绩效考核，客观评价各部门工作成效，强化责任意识，提高行政效能，为加强和改进政府工作提供依据。</p>
+                                    
+                                    <h3 class="text-lg font-semibold mb-2 mt-6">二、考核范围</h3>
+                                    <p class="mb-4">市级各部门、各直属机构。</p>
+                                    
+                                    <h3 class="text-lg font-semibold mb-2 mt-6">三、考核内容</h3>
+                                    <ol class="list-decimal pl-6 mb-4 space-y-2">
+                                        <li>重点工作完成情况；</li>
+                                        <li>日常工作执行效率；</li>
+                                        <li>创新工作开展情况；</li>
+                                        <li>群众满意度评价；</li>
+                                        <li>廉政建设情况。</li>
+                                    </ol>
+                                    
+                                    <h3 class="text-lg font-semibold mb-2 mt-6">四、考核方式</h3>
+                                    <p class="mb-4">采取定量与定性相结合、日常考核与年度考核相结合、部门自评与领导评价相结合的方式。具体包括：</p>
+                                    <ol class="list-decimal pl-6 mb-4 space-y-2">
+                                        <li>部门自评（30%）；</li>
+                                        <li>数据考核（30%）；</li>
+                                        <li>实地核查（20%）；</li>
+                                        <li>社会评价（20%）。</li>
+                                    </ol>
+                                    
+                                    <h3 class="text-lg font-semibold mb-2 mt-6">五、时间安排</h3>
+                                    <ol class="list-decimal pl-6 mb-4 space-y-2">
+                                        <li>4月1日-4月15日：各部门准备自评材料；</li>
+                                        <li>4月16日-4月30日：考核组实地核查；</li>
+                                        <li>5月1日-5月15日：汇总评价，形成考核结果；</li>
+                                        <li>5月20日前：向市政府报告考核结果，并向各部门反馈。</li>
+                                    </ol>
+                                    
+                                    <h3 class="text-lg font-semibold mb-2 mt-6">六、工作要求</h3>
+                                    <ol class="list-decimal pl-6 mb-4 space-y-2">
+                                        <li>各部门要高度重视绩效考核工作，认真组织实施；</li>
+                                        <li>考核资料要真实准确，不得弄虚作假；</li>
+                                        <li>人事部门要加强对考核工作的监督，确保考核工作公平公正；</li>
+                                        <li>考核结果将作为部门评优评先、领导干部提拔任用的重要依据。</li>
+                                    </ol>
+                                    
+                                    <p class="mt-6">特此通知。</p>
+                                    
+                                    <div class="mt-8 text-right">
+                                        <p>人事部</p>
+                                        <p>2025年3月20日</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-6 border-t border-gray-200">
+                                    <h3 class="font-semibold text-gray-800 mb-3">附件</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                            <i class="fas fa-file-pdf text-red-500 text-xl mr-3"></i>
+                                            <div class="flex-1">
+                                                <p class="font-medium text-gray-800">2025年度政府部门绩效考核实施方案.pdf</p>
+                                                <p class="text-xs text-gray-500">2.5 MB</p>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                            <i class="fas fa-file-excel text-green-500 text-xl mr-3"></i>
+                                            <div class="flex-1">
+                                                <p class="font-medium text-gray-800">部门自评表.xlsx</p>
+                                                <p class="text-xs text-gray-500">1.2 MB</p>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+        <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">账号设置</a>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">帮助中心</a>
+        <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+    </div>
+
+    <script>
+        // 模拟公告数据
+        const announcements = [
+            {
+                id: 1,
+                title: "关于开展2025年度政府部门绩效考核的通知",
+                content: `各部门：
+
+为全面推进我市政务工作高质量发展，根据市委市政府有关工作部署，现就开展2025年度政府部门绩效考核工作通知如下：
+
+一、考核目的
+通过绩效考核，客观评价各部门工作成效，强化责任意识，提高行政效能，为加强和改进政府工作提供依据。
+
+二、考核范围
+市级各部门、各直属机构。
+
+三、考核内容
+1. 重点工作完成情况；
+2. 日常工作执行效率；
+3. 创新工作开展情况；
+4. 群众满意度评价；
+5. 廉政建设情况。
+
+四、考核方式
+采取定量与定性相结合、日常考核与年度考核相结合、部门自评与领导评价相结合的方式。具体包括：
+1. 部门自评（30%）；
+2. 数据考核（30%）；
+3. 实地核查（20%）；
+4. 社会评价（20%）。
+
+五、时间安排
+1. 4月1日-4月15日：各部门准备自评材料；
+2. 4月16日-4月30日：考核组实地核查；
+3. 5月1日-5月15日：汇总评价，形成考核结果；
+4. 5月20日前：向市政府报告考核结果，并向各部门反馈。
+
+六、工作要求
+1. 各部门要高度重视绩效考核工作，认真组织实施；
+2. 考核资料要真实准确，不得弄虚作假；
+3. 人事部门要加强对考核工作的监督，确保考核工作公平公正；
+4. 考核结果将作为部门评优评先、领导干部提拔任用的重要依据。
+
+特此通知。
+
+人事部
+2025年3月20日`,
+                department: "人事部",
+                publisher: "王人事",
+                publishDate: "2025-03-20",
+                views: 158,
+                tags: ["通知", "重要", "绩效考核"],
+                materials: [
+                    { name: "2025年度政府部门绩效考核实施方案.pdf", size: "2.5 MB" },
+                    { name: "部门自评表.xlsx", size: "1.2 MB" }
+                ],
+                isStarred: false
+            },
+            {
+                id: 2,
+                title: "关于加强网络安全管理的通知",
+                content: `各部门：
+
+为保障政府网络安全，信息安全处将定期进行安全检查和评估。请各部门严格遵守网络安全管理规定，定期更换密码，做好安全防护工作。
+
+一、安全要求
+1. 定期更换系统密码
+2. 及时更新安全补丁
+3. 加强数据备份
+4. 规范上网行为
+
+二、时间安排
+自即日起开始执行，每月进行一次安全评估。
+
+三、责任追究
+对违反规定的部门和个人将进行通报批评。
+
+特此通知。
+
+信息安全处
+2025年3月18日`,
+                department: "信息安全处",
+                publisher: "李安全",
+                publishDate: "2025-03-18",
+                views: 245,
+                tags: ["通知", "安全", "重要"],
+                materials: [
+                    { name: "网络安全规范.pdf", size: "1.8 MB" }
+                ],
+                isStarred: false
+            },
+            {
+                id: 3,
+                title: "2025年清明节放假安排",
+                content: `各部门：
+
+根据国家规定，4月4日至6日放假调休，共3天。4月7日（星期一）正常上班。
+
+请各部门合理安排工作，做好值班安排。
+
+特此通知。
+
+行政办公室
+2025年3月15日`,
+                department: "行政办公室",
+                publisher: "张行政",
+                publishDate: "2025-03-15",
+                views: 189,
+                tags: ["通知", "放假"],
+                materials: [],
+                isStarred: false
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn || isLoggedIn !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // 用户菜单交互
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (userMenuBtn && userMenu) {
+                userMenuBtn.addEventListener('click', function() {
+                    userMenu.classList.toggle('hidden');
+                });
+                
+                // 点击其他地方关闭菜单
+                document.addEventListener('click', function(event) {
+                    if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
+                        userMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // 退出登录
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('username');
+                    window.location.href = 'login.html';
+                });
+            }
+
+            // 发布公告按钮点击事件
+            const publishBtn = document.querySelector('button.bg-blue-600');
+            const publishModal = document.getElementById('publishModal');
+            const closePublishModal = document.getElementById('closePublishModal');
+            const cancelPublish = document.getElementById('cancelPublish');
+            const publishForm = document.getElementById('publishForm');
+
+            if (publishBtn && publishModal) {
+                publishBtn.addEventListener('click', () => {
+                    publishModal.classList.remove('hidden');
+                });
+
+                closePublishModal.addEventListener('click', () => {
+                    publishModal.classList.add('hidden');
+                });
+
+                cancelPublish.addEventListener('click', () => {
+                    publishModal.classList.add('hidden');
+                });
+
+                publishForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert('公告发布成功！');
+                    publishModal.classList.add('hidden');
+                });
+            }
+
+            // 公告列表切换
+            const filterButtons = document.querySelectorAll('.flex button');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterButtons.forEach(b => b.classList.remove('bg-blue-50', 'border-blue-200', 'text-blue-600'));
+                    btn.classList.add('bg-blue-50', 'border-blue-200', 'text-blue-600');
+                    
+                    // 根据按钮文本过滤公告
+                    const filterText = btn.textContent.trim();
+                    const announcementsList = document.querySelector('.bg-white.rounded-lg.shadow-md.overflow-hidden div:not(.p-4)');
+                    const announcementItems = announcementsList.querySelectorAll('a');
+                    
+                    announcementItems.forEach(item => {
+                        const department = item.querySelector('.text-xs.text-gray-500 span').textContent;
+                        if (filterText === '全部公告' || 
+                            (filterText === '部门公告' && department === '人事部') ||
+                            (filterText === '我的发布' && department === '行政办公室')) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // 公告列表点击事件
+            const announcementLinks = document.querySelectorAll('.bg-white.rounded-lg.shadow-md.overflow-hidden a');
+            const announcementDetail = document.querySelector('.lg\\:col-span-2');
+            
+            announcementLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const title = link.querySelector('h4').textContent;
+                    const announcement = announcements.find(a => a.title === title);
+                    
+                    if (announcement) {
+                        // 更新公告详情
+                        const detailTitle = announcementDetail.querySelector('h2');
+                        const detailMeta = announcementDetail.querySelector('.flex.items-center.text-sm');
+                        const detailTags = announcementDetail.querySelector('.flex.space-x-2');
+                        const detailContent = announcementDetail.querySelector('.p-6.text-gray-700');
+                        const detailAttachments = announcementDetail.querySelector('.space-y-2');
+                        
+                        detailTitle.textContent = announcement.title;
+                        detailMeta.innerHTML = `
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-building mr-1"></i>
+                                <span>发布部门：${announcement.department}</span>
+                            </div>
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-user mr-1"></i>
+                                <span>发布人：${announcement.publisher}</span>
+                            </div>
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                <span>发布日期：${announcement.publishDate}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-eye mr-1"></i>
+                                <span>浏览次数：${announcement.views}</span>
+                            </div>
+                        `;
+                        
+                        detailTags.innerHTML = announcement.tags.map(tag => 
+                            `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">${tag}</span>`
+                        ).join('');
+                        
+                        detailContent.innerHTML = announcement.content.replace(/\n/g, '<br>');
+                        
+                        if (announcement.materials.length > 0) {
+                            detailAttachments.innerHTML = announcement.materials.map(material => `
+                                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                    <i class="fas fa-file-pdf text-red-500 text-xl mr-3"></i>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-gray-800">${material.name}</p>
+                                        <p class="text-xs text-gray-500">${material.size}</p>
+                                    </div>
+                                    <button class="text-blue-600 hover:text-blue-800">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                            `).join('');
+                        } else {
+                            detailAttachments.innerHTML = '<p class="text-gray-500">暂无附件</p>';
+                        }
+                        
+                        // 更新收藏状态
+                        const starBtn = document.querySelector('.fa-star').parentElement;
+                        starBtn.classList.toggle('text-yellow-500', announcement.isStarred);
+                    }
+                });
+            });
+
+            // 收藏功能
+            const starBtn = document.querySelector('.fa-star').parentElement;
+            starBtn.addEventListener('click', () => {
+                starBtn.classList.toggle('text-yellow-500');
+                const title = document.querySelector('h2').textContent;
+                const announcement = announcements.find(a => a.title === title);
+                if (announcement) {
+                    announcement.isStarred = !announcement.isStarred;
+                }
+            });
+
+            // 打印功能
+            const printBtn = document.querySelector('.fa-print').parentElement;
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+
+            // 转发功能
+            const shareBtn = document.querySelector('.fa-share-alt').parentElement;
+            shareBtn.addEventListener('click', () => {
+                const title = document.querySelector('h2').textContent;
+                const url = window.location.href;
+                const text = `分享公告：${title}\n${url}`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: title,
+                        text: text,
+                        url: url
+                    }).catch(console.error);
+                } else {
+                    // 如果不支持原生分享，则复制到剪贴板
+                    navigator.clipboard.writeText(text).then(() => {
+                        alert('链接已复制到剪贴板！');
+                    }).catch(console.error);
+                }
+            });
+        });
+    </script>
+
+    <!-- 发布公告模态框 -->
+    <div id="publishModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="text-xl font-medium text-gray-900">发布公告</h3>
+                    <button class="text-gray-400 hover:text-gray-500" id="closePublishModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="mt-4">
+                    <form id="publishForm">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">公告标题</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">公告内容</label>
+                                <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="10" required></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">公告标签</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">通知</span>
+                                    <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">重要</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">普通</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">附件</label>
+                                <input type="file" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <button type="button" id="cancelPublish" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">取消</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">发布</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

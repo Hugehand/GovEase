@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统设置 - 政务办公系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 系统Logo样式 */
+        .system-logo {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        /* 深色模式样式 */
+        .dark-mode {
+            background-color: #1a202c !important;
+            color: #e2e8f0 !important;
+        }
+        
+        .dark-mode .bg-white {
+            background-color: #2d3748 !important;
+        }
+        
+        .dark-mode .bg-gray-100 {
+            background-color: #1a202c !important;
+        }
+        
+        .dark-mode .text-gray-800, 
+        .dark-mode .text-gray-700 {
+            color: #e2e8f0 !important;
+        }
+        
+        .dark-mode .text-gray-600, 
+        .dark-mode .text-gray-500 {
+            color: #a0aec0 !important;
+        }
+        
+        .dark-mode .border-gray-200, 
+        .dark-mode .border-gray-300 {
+            border-color: #4a5568 !important;
+        }
+        
+        .dark-mode input, 
+        .dark-mode select, 
+        .dark-mode textarea {
+            background-color: #2d3748 !important;
+            color: #e2e8f0 !important;
+            border-color: #4a5568 !important;
+        }
+        
+        .dark-mode .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.36) !important;
+        }
+        
+        .dark-mode .bg-gray-50 {
+            background-color: #374151 !important;
+        }
+        
+        .dark-mode table thead {
+            background-color: #374151 !important;
+        }
+        
+        .dark-mode table tbody tr {
+            background-color: #2d3748 !important;
+        }
+    </style>
+    <!-- 系统Logo生成脚本 - 所有页面共享 -->
+    <script id="system-logo-script">
+        // 系统Logo生成和应用函数
+        // 在其他页面引用此脚本时，确保在body加载完成后调用initSystemLogo()函数
+        function generateSystemLogo(color = "#FFFFFF", backgroundColor = "transparent", size = 40) {
+            // 创建SVG命名空间
+            const svgNS = "http://www.w3.org/2000/svg";
+            
+            // 创建SVG元素
+            const svg = document.createElementNS(svgNS, "svg");
+            svg.setAttribute("width", size);
+            svg.setAttribute("height", size);
+            svg.setAttribute("viewBox", "0 0 100 100");
+            svg.setAttribute("fill", "none");
+            svg.setAttribute("class", "system-logo");
+            
+            // 创建背景圆形
+            const circle = document.createElementNS(svgNS, "circle");
+            circle.setAttribute("cx", "50");
+            circle.setAttribute("cy", "50");
+            circle.setAttribute("r", "50");
+            circle.setAttribute("fill", backgroundColor);
+            
+            // 创建外环
+            const outerRing = document.createElementNS(svgNS, "path");
+            outerRing.setAttribute("d", "M50 10C27.9086 10 10 27.9086 10 50C10 72.0914 27.9086 90 50 90C72.0914 90 90 72.0914 90 50C90 27.9086 72.0914 10 50 10Z");
+            outerRing.setAttribute("stroke", color);
+            outerRing.setAttribute("stroke-width", "4");
+            
+            // 创建内部图形 - 代表政府建筑的图形
+            const building = document.createElementNS(svgNS, "path");
+            building.setAttribute("d", "M50 20L20 40V80H80V40L50 20Z");
+            building.setAttribute("fill", color);
+            building.setAttribute("opacity", "0.8");
+            
+            // 创建门
+            const door = document.createElementNS(svgNS, "rect");
+            door.setAttribute("x", "45");
+            door.setAttribute("y", "55");
+            door.setAttribute("width", "10");
+            door.setAttribute("height", "25");
+            door.setAttribute("fill", backgroundColor);
+            
+            // 创建柱子
+            const column1 = document.createElementNS(svgNS, "rect");
+            column1.setAttribute("x", "30");
+            column1.setAttribute("y", "45");
+            column1.setAttribute("width", "5");
+            column1.setAttribute("height", "35");
+            column1.setAttribute("fill", backgroundColor);
+            
+            const column2 = document.createElementNS(svgNS, "rect");
+            column2.setAttribute("x", "65");
+            column2.setAttribute("y", "45");
+            column2.setAttribute("width", "5");
+            column2.setAttribute("height", "35");
+            column2.setAttribute("fill", backgroundColor);
+            
+            // 添加元素到SVG
+            svg.appendChild(circle);
+            svg.appendChild(outerRing);
+            svg.appendChild(building);
+            svg.appendChild(door);
+            svg.appendChild(column1);
+            svg.appendChild(column2);
+            
+            return svg;
+        }
+
+        // 初始化系统Logo - 用于在所有页面应用Logo
+        function initSystemLogo() {
+            // 获取当前主题颜色
+            let currentTheme = localStorage.getItem('theme') || 'blue';
+            
+            // 应用Logo到侧边栏
+            const sidebarLogo = document.getElementById('sidebarLogo');
+            if (sidebarLogo) {
+                sidebarLogo.innerHTML = '';
+                const logo = generateSystemLogo("#FFFFFF", "transparent", 40);
+                sidebarLogo.appendChild(logo);
+            }
+            
+            // 应用Logo到每个菜单项
+            const menuItems = document.querySelectorAll('nav a');
+            menuItems.forEach(item => {
+                // 检查是否已有Logo容器
+                let logoContainer = item.querySelector('.menu-logo-container');
+                if (!logoContainer) {
+                    // 创建Logo容器
+                    logoContainer = document.createElement('div');
+                    logoContainer.className = 'menu-logo-container w-5 h-5 mr-2 flex items-center justify-center';
+                    
+                    // 获取当前图标元素
+                    const iconElement = item.querySelector('i');
+                    
+                    // 确定当前项的颜色和活跃状态
+                    const isActive = item.classList.contains('bg-opacity-50');
+                    const logoColor = isActive ? "#FFFFFF" : "#A5C3EE"; // 活跃项使用白色，非活跃项使用浅蓝色
+                    
+                    // 创建小Logo
+                    const smallLogo = generateSystemLogo(logoColor, "transparent", 20);
+                    logoContainer.appendChild(smallLogo);
+                    
+                    // 如果已有图标，则替换它；否则添加到项目开始
+                    if (iconElement) {
+                        item.replaceChild(logoContainer, iconElement);
+                    } else {
+                        item.insertBefore(logoContainer, item.firstChild);
+                    }
+                }
+            });
+            
+            // 应用Logo到关于系统页面（如果存在）
+            const aboutSystemLogo = document.querySelector('#about-system .flex.flex-col.items-center img');
+            if (aboutSystemLogo) {
+                const parentElement = aboutSystemLogo.parentElement;
+                let logoContainer = document.getElementById('aboutSystemLogoContainer');
+                
+                if (!logoContainer) {
+                    logoContainer = document.createElement('div');
+                    logoContainer.className = 'w-24 h-24 mb-4';
+                    logoContainer.id = 'aboutSystemLogoContainer';
+                    
+                    // 根据主题获取颜色
+                    let primaryColor = "#3B82F6"; // 默认蓝色
+                    let bgColor = "#EFF6FF";
+                    
+                    switch(currentTheme) {
+                        case 'green':
+                            primaryColor = "#10B981";
+                            bgColor = "#ECFDF5";
+                            break;
+                        case 'purple':
+                            primaryColor = "#8B5CF6";
+                            bgColor = "#F3F4F6";
+                            break;
+                        case 'red':
+                            primaryColor = "#EF4444";
+                            bgColor = "#FEF2F2";
+                            break;
+                        case 'dark':
+                            primaryColor = "#4B5563";
+                            bgColor = "#F9FAFB";
+                            break;
+                    }
+                    
+                    const logo = generateSystemLogo(primaryColor, bgColor, 120);
+                    logoContainer.appendChild(logo);
+                    
+                    // 替换原始的img元素
+                    parentElement.replaceChild(logoContainer, aboutSystemLogo);
+                }
+            }
+        }
+
+        // 更新指定主题的Logo颜色
+        function updateLogoColors(theme) {
+            const aboutLogoContainer = document.getElementById('aboutSystemLogoContainer');
+            if (aboutLogoContainer) {
+                // 移除现有Logo
+                aboutLogoContainer.innerHTML = '';
+                
+                // 根据主题获取颜色
+                let primaryColor = "#3B82F6"; // 默认蓝色
+                let bgColor = "#EFF6FF";
+                
+                switch(theme) {
+                    case 'green':
+                        primaryColor = "#10B981";
+                        bgColor = "#ECFDF5";
+                        break;
+                    case 'purple':
+                        primaryColor = "#8B5CF6";
+                        bgColor = "#F3F4F6";
+                        break;
+                    case 'red':
+                        primaryColor = "#EF4444";
+                        bgColor = "#FEF2F2";
+                        break;
+                    case 'dark':
+                        primaryColor = "#4B5563";
+                        bgColor = "#F9FAFB";
+                        break;
+                }
+                
+                // 生成新Logo
+                const logo = generateSystemLogo(primaryColor, bgColor, 120);
+                aboutLogoContainer.appendChild(logo);
+            }
+            
+            // 更新菜单项Logo颜色
+            const menuItems = document.querySelectorAll('nav a');
+            menuItems.forEach(item => {
+                const logoContainer = item.querySelector('.menu-logo-container');
+                if (logoContainer) {
+                    logoContainer.innerHTML = '';
+                    // 确定当前项的颜色和活跃状态
+                    const isActive = item.classList.contains('bg-opacity-50');
+                    const logoColor = isActive ? "#FFFFFF" : "#A5C3EE"; // 活跃项使用白色，非活跃项使用浅蓝色
+                    
+                    // 创建小Logo
+                    const smallLogo = generateSystemLogo(logoColor, "transparent", 20);
+                    logoContainer.appendChild(smallLogo);
+                }
+            });
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex min-h-screen">
+        <!-- 侧边栏导航 -->
+        <aside class="w-64 bg-blue-800 text-white shadow-lg hidden md:block">
+            <div class="p-4 border-b border-blue-700">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 mr-3 relative" id="sidebarLogo">
+                        <!-- Logo将在JavaScript中生成并插入 -->
+                    </div>
+                    <h1 class="text-xl font-bold">政务办公系统</h1>
+                </div>
+            </div>
+            <nav class="py-4">
+                <div class="px-4 py-2 text-blue-200 text-xs uppercase tracking-wider">主菜单</div>
+                <a href="dashboard.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tachometer-alt w-5 text-center mr-2"></i>
+                    <span>个人工作台</span>
+                </a>
+                <a href="document-flow.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-file-signature w-5 text-center mr-2"></i>
+                    <span>公文处理</span>
+                </a>
+                <a href="document-mgmt.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-folder w-5 text-center mr-2"></i>
+                    <span>文档管理</span>
+                </a>
+                <a href="meeting.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-calendar-alt w-5 text-center mr-2"></i>
+                    <span>会议管理</span>
+                </a>
+                <a href="announcement.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-bullhorn w-5 text-center mr-2"></i>
+                    <span>通知公告</span>
+                </a>
+                <a href="task.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tasks w-5 text-center mr-2"></i>
+                    <span>任务管理</span>
+                </a>
+                <a href="attendance.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-user-clock w-5 text-center mr-2"></i>
+                    <span>考勤管理</span>
+                </a>
+                <a href="organization.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-sitemap w-5 text-center mr-2"></i>
+                    <span>组织架构</span>
+                </a>
+                <a href="settings.html" class="flex items-center px-4 py-3 text-white bg-blue-900 bg-opacity-50">
+                    <i class="fas fa-cog w-5 text-center mr-2"></i>
+                    <span>系统设置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主要内容区域 -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between px-6 py-3">
+                    <div class="flex items-center">
+                        <button class="text-gray-500 focus:outline-none md:hidden">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h2 class="text-lg font-medium text-gray-800 ml-4">系统设置</h2>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="flex mx-4 text-gray-600 focus:outline-none">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="absolute top-0 right-0 h-4 w-4 mt-1 mr-2 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
+                        </button>
+                        <div class="relative">
+                            <button class="relative z-10 block h-8 w-8 rounded-full overflow-hidden focus:outline-none">
+                                <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Your avatar">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 内容区域 -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="container mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <!-- 左侧设置导航菜单 -->
+                        <div class="col-span-1">
+                            <div class="bg-white rounded-lg shadow-md">
+                                <div class="p-4 border-b border-gray-200">
+                                    <h3 class="font-medium text-gray-800">设置菜单</h3>
+                                </div>
+                                <div class="p-2">
+                                    <ul class="space-y-1">
+                                        <li>
+                                            <a href="#" class="setting-menu-item flex items-center px-4 py-2 rounded-lg bg-blue-50 text-blue-600" data-target="personal-info">
+                                                <i class="fas fa-user mr-3"></i>
+                                                <span>个人信息</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="setting-menu-item flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50" data-target="account-security">
+                                                <i class="fas fa-lock mr-3"></i>
+                                                <span>账号安全</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="setting-menu-item flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50" data-target="notification-settings">
+                                                <i class="fas fa-bell mr-3"></i>
+                                                <span>通知设置</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="setting-menu-item flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50" data-target="interface-settings">
+                                                <i class="fas fa-desktop mr-3"></i>
+                                                <span>界面设置</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="setting-menu-item flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50" data-target="privacy-settings">
+                                                <i class="fas fa-shield-alt mr-3"></i>
+                                                <span>隐私设置</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="setting-menu-item flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50" data-target="login-history">
+                                                <i class="fas fa-history mr-3"></i>
+                                                <span>登录历史</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="setting-menu-item flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50" data-target="about-system">
+                                                <i class="fas fa-info-circle mr-3"></i>
+                                                <span>关于系统</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧设置内容 -->
+                        <div class="col-span-1 md:col-span-3">
+                            <!-- 个人信息设置 -->
+                            <div id="personal-info" class="setting-content bg-white rounded-lg shadow-md overflow-hidden mb-6">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800">个人信息</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex flex-col md:flex-row items-start mb-8">
+                                        <div class="md:w-32 flex-shrink-0 mb-4 md:mb-0">
+                                            <div class="relative">
+                                                <img class="w-24 h-24 rounded-full mx-auto" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="头像">
+                                                <button class="absolute bottom-0 right-8 bg-blue-600 text-white rounded-full p-1 shadow-md">
+                                                    <i class="fas fa-camera"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="md:ml-6 w-full">
+                                            <form>
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <div>
+                                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
+                                                        <input type="text" id="name" class="form-input w-full rounded-md border-gray-300" value="张主任">
+                                                    </div>
+                                                    <div>
+                                                        <label for="employee_id" class="block text-sm font-medium text-gray-700 mb-1">工号</label>
+                                                        <input type="text" id="employee_id" class="form-input w-full rounded-md border-gray-300 bg-gray-50" value="G12345" readonly>
+                                                    </div>
+                                                    <div>
+                                                        <label for="department" class="block text-sm font-medium text-gray-700 mb-1">部门</label>
+                                                        <input type="text" id="department" class="form-input w-full rounded-md border-gray-300 bg-gray-50" value="市政府办公厅" readonly>
+                                                    </div>
+                                                    <div>
+                                                        <label for="position" class="block text-sm font-medium text-gray-700 mb-1">职位</label>
+                                                        <input type="text" id="position" class="form-input w-full rounded-md border-gray-300 bg-gray-50" value="办公厅主任" readonly>
+                                                    </div>
+                                                    <div>
+                                                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">手机号码</label>
+                                                        <input type="text" id="phone" class="form-input w-full rounded-md border-gray-300" value="138****5678">
+                                                    </div>
+                                                    <div>
+                                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">电子邮箱</label>
+                                                        <input type="email" id="email" class="form-input w-full rounded-md border-gray-300" value="zhang@gov.cn">
+                                                    </div>
+                                                    <div>
+                                                        <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">性别</label>
+                                                        <select id="gender" class="form-select w-full rounded-md border-gray-300">
+                                                            <option selected>男</option>
+                                                            <option>女</option>
+                                                            <option>保密</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label for="birth" class="block text-sm font-medium text-gray-700 mb-1">出生日期</label>
+                                                        <input type="date" id="birth" class="form-input w-full rounded-md border-gray-300" value="1980-05-15">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="mt-6">
+                                                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1">工作地址</label>
+                                                    <input type="text" id="address" class="form-input w-full rounded-md border-gray-300" value="XX市政府大楼B座502室">
+                                                </div>
+                                                
+                                                <div class="mt-6">
+                                                    <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">个人简介</label>
+                                                    <textarea id="bio" rows="3" class="form-textarea w-full rounded-md border-gray-300" placeholder="请输入个人简介...">负责市政府办公厅日常工作，协调各部门工作，主持办公厅例会，审批重要文件。</textarea>
+                                                </div>
+                                                
+                                                <div class="mt-6 flex justify-end">
+                                                    <button type="button" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-md mr-3">取消</button>
+                                                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">保存更改</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 账号安全设置 -->
+                            <div id="account-security" class="setting-content bg-white rounded-lg shadow-md overflow-hidden mb-6 hidden">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800">账号安全</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">登录密码</h4>
+                                                <p class="text-sm text-gray-600 mt-1">上次修改时间：2025年2月15日</p>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800">修改</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">手机绑定</h4>
+                                                <p class="text-sm text-gray-600 mt-1">已绑定手机：138****5678</p>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800">修改</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">邮箱绑定</h4>
+                                                <p class="text-sm text-gray-600 mt-1">已绑定邮箱：zhang@gov.cn</p>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800">修改</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">双因素认证</h4>
+                                                <p class="text-sm text-gray-600 mt-1">启用后将大幅提高账号安全性</p>
+                                            </div>
+                                            <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                                <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            </div>
+                                            <style>
+                                                .toggle-checkbox:checked {
+                                                    right: 0;
+                                                    border-color: #3b82f6;
+                                                }
+                                                .toggle-checkbox:checked + .toggle-label {
+                                                    background-color: #3b82f6;
+                                                }
+                                            </style>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 通知设置 -->
+                            <div id="notification-settings" class="setting-content bg-white rounded-lg shadow-md overflow-hidden mb-6 hidden">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800">通知设置</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <h4 class="font-medium text-gray-800 mb-4">接收通知方式</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center">
+                                                <input id="email_notify" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" checked>
+                                                <label for="email_notify" class="ml-2 block text-sm text-gray-700">电子邮件通知</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="sms_notify" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" checked>
+                                                <label for="sms_notify" class="ml-2 block text-sm text-gray-700">短信通知</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="app_notify" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" checked>
+                                                <label for="app_notify" class="ml-2 block text-sm text-gray-700">系统内通知</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <h4 class="font-medium text-gray-800 mb-4">通知类型</h4>
+                                        <div class="space-y-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="font-medium text-gray-700">公文通知</p>
+                                                    <p class="text-sm text-gray-500">有新的公文需要您处理时通知您</p>
+                                                </div>
+                                                <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                    <input type="checkbox" name="toggle1" id="toggle1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                    <label for="toggle1" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="font-medium text-gray-700">会议通知</p>
+                                                    <p class="text-sm text-gray-500">有新的会议安排或会议变更时通知您</p>
+                                                </div>
+                                                <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                    <input type="checkbox" name="toggle2" id="toggle2" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                    <label for="toggle2" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="font-medium text-gray-700">公告通知</p>
+                                                    <p class="text-sm text-gray-500">有新的公告发布时通知您</p>
+                                                </div>
+                                                <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                    <input type="checkbox" name="toggle3" id="toggle3" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                    <label for="toggle3" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="font-medium text-gray-700">任务通知</p>
+                                                    <p class="text-sm text-gray-500">有新的任务分配或任务更新时通知您</p>
+                                                </div>
+                                                <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                    <input type="checkbox" name="toggle4" id="toggle4" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                    <label for="toggle4" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="font-medium text-gray-700">系统消息</p>
+                                                    <p class="text-sm text-gray-500">系统维护、升级等信息通知</p>
+                                                </div>
+                                                <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                    <input type="checkbox" name="toggle5" id="toggle5" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                                    <label for="toggle5" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-6 flex justify-end">
+                                            <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">保存设置</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 界面设置 -->
+                            <div id="interface-settings" class="setting-content bg-white rounded-lg shadow-md overflow-hidden mb-6 hidden">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800">界面设置</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <h4 class="font-medium text-gray-800 mb-4">颜色主题</h4>
+                                        <div class="flex space-x-3">
+                                            <div class="theme-option w-12 h-12 rounded-md bg-blue-800 border-2 border-transparent cursor-pointer hover:border-blue-400" data-theme="blue"></div>
+                                            <div class="theme-option w-12 h-12 rounded-md bg-green-800 border-2 border-transparent cursor-pointer hover:border-blue-400" data-theme="green"></div>
+                                            <div class="theme-option w-12 h-12 rounded-md bg-purple-800 border-2 border-transparent cursor-pointer hover:border-blue-400" data-theme="purple"></div>
+                                            <div class="theme-option w-12 h-12 rounded-md bg-red-800 border-2 border-transparent cursor-pointer hover:border-blue-400" data-theme="red"></div>
+                                            <div class="theme-option w-12 h-12 rounded-md bg-gray-800 border-2 border-transparent cursor-pointer hover:border-blue-400" data-theme="dark"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">深色模式</h4>
+                                                <p class="text-sm text-gray-600 mt-1">在夜间或弱光环境下使用深色模式可减轻眼睛疲劳</p>
+                                            </div>
+                                            <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                <input type="checkbox" name="dark_mode" id="dark_mode" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                                <label for="dark_mode" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <h4 class="font-medium text-gray-800 mb-4">字体大小</h4>
+                                        <div class="flex items-center">
+                                            <span class="text-sm text-gray-600 mr-2">小</span>
+                                            <input type="range" min="12" max="20" value="16" class="form-range w-full" id="fontSize">
+                                            <span class="text-sm text-gray-600 ml-2">大</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <h4 class="font-medium text-gray-800 mb-4">布局选项</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center">
+                                                <input id="compact_layout" type="radio" name="layout" class="h-4 w-4 text-blue-600 border-gray-300" checked>
+                                                <label for="compact_layout" class="ml-2 block text-sm text-gray-700">紧凑布局</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="comfortable_layout" type="radio" name="layout" class="h-4 w-4 text-blue-600 border-gray-300">
+                                                <label for="comfortable_layout" class="ml-2 block text-sm text-gray-700">舒适布局</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="wide_layout" type="radio" name="layout" class="h-4 w-4 text-blue-600 border-gray-300">
+                                                <label for="wide_layout" class="ml-2 block text-sm text-gray-700">宽敞布局</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-6 flex justify-end">
+                                        <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">保存设置</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 隐私设置 -->
+                            <div id="privacy-settings" class="setting-content bg-white rounded-lg shadow-md overflow-hidden mb-6 hidden">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800">隐私设置</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">个人资料可见性</h4>
+                                                <p class="text-sm text-gray-600 mt-1">设置哪些人可以查看您的个人资料</p>
+                                            </div>
+                                            <select class="form-select text-sm border-gray-300 rounded-md">
+                                                <option>所有人</option>
+                                                <option>仅同部门</option>
+                                                <option>仅管理员</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">联系方式可见性</h4>
+                                                <p class="text-sm text-gray-600 mt-1">设置哪些人可以查看您的联系方式</p>
+                                            </div>
+                                            <select class="form-select text-sm border-gray-300 rounded-md">
+                                                <option>所有人</option>
+                                                <option selected>仅同部门</option>
+                                                <option>仅管理员</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">在线状态</h4>
+                                                <p class="text-sm text-gray-600 mt-1">是否向其他人显示您的在线状态</p>
+                                            </div>
+                                            <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                <input type="checkbox" name="online_status" id="online_status" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="online_status" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-b border-gray-200 pb-6 mb-6">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">搜索可见性</h4>
+                                                <p class="text-sm text-gray-600 mt-1">是否允许他人通过搜索找到您</p>
+                                            </div>
+                                            <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                <input type="checkbox" name="search_visibility" id="search_visibility" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="search_visibility" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <h4 class="font-medium text-gray-800">日志活动记录</h4>
+                                                <p class="text-sm text-gray-600 mt-1">是否允许系统记录您的操作活动</p>
+                                            </div>
+                                            <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                                <input type="checkbox" name="activity_log" id="activity_log" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="activity_log" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-6 flex justify-end">
+                                        <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">保存设置</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 登录历史 -->
+                            <div id="login-history" class="setting-content bg-white rounded-lg shadow-md overflow-hidden mb-6 hidden">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800">登录历史</h3>
+                                </div>
+                                <div class="p-6">
+                                    <p class="text-sm text-gray-600 mb-4">以下是您最近的登录记录，如发现可疑活动请立即修改密码并联系管理员。</p>
+                                    
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">时间</th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP地址</th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">设备</th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">浏览器</th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                <tr>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-02-28 08:45:12</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.1</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Windows 10</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Chrome 125.0</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">成功</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-02-27 17:22:36</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.1</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Windows 10</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Chrome 125.0</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">成功</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-02-26 09:15:42</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">120.35.68.92</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Android 15</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mobile Chrome</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">成功</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-02-25 14:08:33</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">58.64.132.45</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Unknown</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Unknown</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">失败</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-02-25 08:32:11</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.1</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Windows 10</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Chrome 125.0</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">成功</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="mt-6 flex justify-between items-center">
+                                        <button type="button" class="text-blue-600 hover:text-blue-800 text-sm">导出登录历史</button>
+                                        <div class="flex space-x-2">
+                                            <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">上一页</button>
+                                            <button class="px-3 py-1 border border-gray-300 rounded-md bg-blue-50 text-blue-600 font-medium">1</button>
+                                            <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">2</button>
+                                            <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">下一页</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 关于系统 -->
+                            <div id="about-system" class="setting-content bg-white rounded-lg shadow-md overflow-hidden mb-6 hidden">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800">关于系统</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex flex-col items-center mb-6">
+                                        <img src="https://via.placeholder.com/120x120?text=Logo" alt="系统Logo" class="w-24 h-24 mb-4">
+                                        <h3 class="text-xl font-bold text-gray-800">政务办公系统</h3>
+                                        <p class="text-sm text-gray-600">版本 2.5.8 (2025021501)</p>
+                                    </div>
+                                    
+                                    <div class="border-t border-gray-200 pt-6">
+                                        <h4 class="font-medium text-gray-800 mb-2">系统信息</h4>
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between text-sm">
+                                                <span class="text-gray-600">系统版本</span>
+                                                <span class="text-gray-800">2.5.8</span>
+                                            </div>
+                                            <div class="flex justify-between text-sm">
+                                                <span class="text-gray-600">发布日期</span>
+                                                <span class="text-gray-800">2025年2月15日</span>
+                                            </div>
+                                            <div class="flex justify-between text-sm">
+                                                <span class="text-gray-600">许可证</span>
+                                                <span class="text-gray-800">政府专用授权</span>
+                                            </div>
+                                            <div class="flex justify-between text-sm">
+                                                <span class="text-gray-600">浏览器</span>
+                                                <span class="text-gray-800">Chrome 125.0.0.0</span>
+                                            </div>
+                                            <div class="flex justify-between text-sm">
+                                                <span class="text-gray-600">操作系统</span>
+                                                <span class="text-gray-800">Windows 10</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-t border-gray-200 pt-6 mt-6">
+                                        <h4 class="font-medium text-gray-800 mb-2">版本更新日志</h4>
+                                        <div class="space-y-3">
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800">版本 2.5.8 (2025-02-15)</p>
+                                                <ul class="list-disc list-inside text-sm text-gray-600 ml-2 mt-1">
+                                                    <li>优化了文档管理系统的搜索功能</li>
+                                                    <li>修复了会议管理中的日期选择问题</li>
+                                                    <li>改进了移动端界面的兼容性</li>
+                                                    <li>提升了系统响应速度和稳定性</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800">版本 2.5.7 (2025-01-20)</p>
+                                                <ul class="list-disc list-inside text-sm text-gray-600 ml-2 mt-1">
+                                                    <li>新增了任务管理的批量操作功能</li>
+                                                    <li>优化了组织架构的展示方式</li>
+                                                    <li>修复了通知系统的推送延迟问题</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-t border-gray-200 pt-6 mt-6">
+                                        <h4 class="font-medium text-gray-800 mb-2">联系与支持</h4>
+                                        <p class="text-sm text-gray-600 mb-4">如果您在使用过程中遇到问题，请通过以下方式联系我们：</p>
+                                        <div class="space-y-2">
+                                            <div class="flex text-sm">
+                                                <span class="text-gray-600 w-20">技术支持：</span>
+                                                <span class="text-blue-600">support@gov-system.cn</span>
+                                            </div>
+                                            <div class="flex text-sm">
+                                                <span class="text-gray-600 w-20">服务热线：</span>
+                                                <span class="text-gray-800">400-888-9999</span>
+                                            </div>
+                                            <div class="flex text-sm">
+                                                <span class="text-gray-600 w-20">工作时间：</span>
+                                                <span class="text-gray-800">周一至周五 9:00-18:00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+        <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">账号设置</a>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">帮助中心</a>
+        <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化系统Logo
+            initSystemLogo();
+            
+            // 检查登录状态
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn || isLoggedIn !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // 用户菜单交互
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (userMenuBtn && userMenu) {
+                userMenuBtn.addEventListener('click', function() {
+                    userMenu.classList.toggle('hidden');
+                });
+                
+                // 点击其他地方关闭菜单
+                document.addEventListener('click', function(event) {
+                    if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
+                        userMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // 退出登录
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('username');
+                    window.location.href = 'login.html';
+                });
+            }
+
+            // 设置菜单切换
+            const menuItems = document.querySelectorAll('.setting-menu-item');
+            const contentPanels = document.querySelectorAll('.setting-content');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 获取目标内容区域的ID
+                    const targetId = this.getAttribute('data-target');
+                    
+                    // 移除所有菜单项的高亮状态
+                    menuItems.forEach(mi => {
+                        mi.classList.remove('bg-blue-50', 'text-blue-600');
+                        mi.classList.add('text-gray-700', 'hover:bg-gray-50');
+                    });
+                    
+                    // 高亮当前点击的菜单项
+                    this.classList.add('bg-blue-50', 'text-blue-600');
+                    this.classList.remove('text-gray-700', 'hover:bg-gray-50');
+                    
+                    // 隐藏所有内容区域
+                    contentPanels.forEach(panel => {
+                        panel.classList.add('hidden');
+                    });
+                    
+                    // 显示对应的内容区域
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+
+            // 颜色主题切换功能
+            const themeOptions = document.querySelectorAll('.theme-option');
+            const body = document.body;
+            const aside = document.querySelector('aside');
+            const saveThemeButton = document.querySelector('#interface-settings button');
+            
+            // 定义主题颜色映射
+            const themes = {
+                'blue': {
+                    primary: 'bg-blue-800',
+                    primaryHover: 'hover:bg-blue-700',
+                    primaryBorder: 'border-blue-700',
+                    primaryText: 'text-blue-600',
+                    primaryTextHover: 'hover:text-blue-800',
+                    primaryBg: 'bg-blue-50',
+                    primaryBgOpacity: 'bg-blue-900',
+                    buttonBg: 'bg-blue-600',
+                    buttonHover: 'hover:bg-blue-700'
+                },
+                'green': {
+                    primary: 'bg-green-800',
+                    primaryHover: 'hover:bg-green-700',
+                    primaryBorder: 'border-green-700',
+                    primaryText: 'text-green-600',
+                    primaryTextHover: 'hover:text-green-800',
+                    primaryBg: 'bg-green-50',
+                    primaryBgOpacity: 'bg-green-900',
+                    buttonBg: 'bg-green-600',
+                    buttonHover: 'hover:bg-green-700'
+                },
+                'purple': {
+                    primary: 'bg-purple-800',
+                    primaryHover: 'hover:bg-purple-700',
+                    primaryBorder: 'border-purple-700',
+                    primaryText: 'text-purple-600',
+                    primaryTextHover: 'hover:text-purple-800',
+                    primaryBg: 'bg-purple-50',
+                    primaryBgOpacity: 'bg-purple-900',
+                    buttonBg: 'bg-purple-600',
+                    buttonHover: 'hover:bg-purple-700'
+                },
+                'red': {
+                    primary: 'bg-red-800',
+                    primaryHover: 'hover:bg-red-700',
+                    primaryBorder: 'border-red-700',
+                    primaryText: 'text-red-600',
+                    primaryTextHover: 'hover:text-red-800',
+                    primaryBg: 'bg-red-50',
+                    primaryBgOpacity: 'bg-red-900',
+                    buttonBg: 'bg-red-600',
+                    buttonHover: 'hover:bg-red-700'
+                },
+                'dark': {
+                    primary: 'bg-gray-800',
+                    primaryHover: 'hover:bg-gray-700',
+                    primaryBorder: 'border-gray-700',
+                    primaryText: 'text-gray-600',
+                    primaryTextHover: 'hover:text-gray-800',
+                    primaryBg: 'bg-gray-50',
+                    primaryBgOpacity: 'bg-gray-900',
+                    buttonBg: 'bg-gray-600',
+                    buttonHover: 'hover:bg-gray-700'
+                }
+            };
+
+            // 设置当前主题
+            let currentTheme = localStorage.getItem('theme') || 'blue';
+            
+            // 初始化主题选择高亮
+            function highlightSelectedTheme() {
+                themeOptions.forEach(option => {
+                    const theme = option.getAttribute('data-theme');
+                    if (theme === currentTheme) {
+                        option.classList.remove('border-transparent');
+                        option.classList.add('border-white');
+                        option.innerHTML = '<i class="fas fa-check text-white flex items-center justify-center h-full"></i>';
+                    } else {
+                        option.classList.add('border-transparent');
+                        option.classList.remove('border-white');
+                        option.innerHTML = '';
+                    }
+                });
+            }
+
+            // 应用主题
+            function applyTheme(theme) {
+                if (!themes[theme]) return;
+                
+                const oldTheme = themes[currentTheme];
+                const newTheme = themes[theme];
+                
+                // 更新侧边栏背景色
+                aside.classList.remove(oldTheme.primary);
+                aside.classList.add(newTheme.primary);
+                
+                // 更新侧边栏边框
+                const asideBorder = aside.querySelector('.border-blue-700');
+                if (asideBorder) {
+                    asideBorder.classList.remove(oldTheme.primaryBorder);
+                    asideBorder.classList.add(newTheme.primaryBorder);
+                }
+
+                // 更新导航项的悬停效果
+                const navItems = document.querySelectorAll('.hover\\:bg-blue-700');
+                navItems.forEach(item => {
+                    item.classList.remove(oldTheme.primaryHover);
+                    item.classList.add(newTheme.primaryHover);
+                });
+
+                // 更新当前活跃的导航项
+                const activeNavItem = document.querySelector('.bg-blue-900');
+                if (activeNavItem) {
+                    activeNavItem.classList.remove(oldTheme.primaryBgOpacity);
+                    activeNavItem.classList.add(newTheme.primaryBgOpacity);
+                }
+
+                // 更新所有按钮
+                const buttons = document.querySelectorAll('.bg-blue-600');
+                buttons.forEach(button => {
+                    button.classList.remove(oldTheme.buttonBg);
+                    button.classList.add(newTheme.buttonBg);
+                });
+
+                const buttonHovers = document.querySelectorAll('.hover\\:bg-blue-700');
+                buttonHovers.forEach(button => {
+                    button.classList.remove(oldTheme.buttonHover);
+                    button.classList.add(newTheme.buttonHover);
+                });
+
+                // 更新所有文本颜色
+                const textColors = document.querySelectorAll('.text-blue-600');
+                textColors.forEach(el => {
+                    el.classList.remove(oldTheme.primaryText);
+                    el.classList.add(newTheme.primaryText);
+                });
+
+                const textHovers = document.querySelectorAll('.hover\\:text-blue-800');
+                textHovers.forEach(el => {
+                    el.classList.remove(oldTheme.primaryTextHover);
+                    el.classList.add(newTheme.primaryTextHover);
+                });
+
+                // 更新背景色
+                const bgElements = document.querySelectorAll('.bg-blue-50');
+                bgElements.forEach(el => {
+                    el.classList.remove(oldTheme.primaryBg);
+                    el.classList.add(newTheme.primaryBg);
+                });
+
+                // 更新复选框样式
+                const toggleCheckboxes = document.querySelectorAll('.toggle-checkbox:checked');
+                const toggleLabels = document.querySelectorAll('.toggle-checkbox:checked + .toggle-label');
+                
+                // 更新自定义CSS
+                const styleTag = document.getElementById('theme-styles') || document.createElement('style');
+                if (!styleTag.id) styleTag.id = 'theme-styles';
+                
+                styleTag.innerHTML = `
+                    .toggle-checkbox:checked {
+                        border-color: ${getComputedStyle(document.querySelector(`.${newTheme.buttonBg}`)).backgroundColor} !important;
+                    }
+                    .toggle-checkbox:checked + .toggle-label {
+                        background-color: ${getComputedStyle(document.querySelector(`.${newTheme.buttonBg}`)).backgroundColor} !important;
+                    }
+                `;
+                
+                if (!styleTag.parentNode) {
+                    document.head.appendChild(styleTag);
+                }
+                
+                // 更新Logo颜色
+                updateLogoColors(theme);
+                
+                // 保存当前主题
+                currentTheme = theme;
+                localStorage.setItem('theme', theme);
+                
+                // 更新主题选择高亮
+                highlightSelectedTheme();
+            }
+
+            // 主题选项点击事件
+            themeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    applyTheme(theme);
+                });
+            });
+
+            // 保存按钮点击事件
+            if (saveThemeButton) {
+                saveThemeButton.addEventListener('click', function() {
+                    alert('主题设置已保存！');
+                });
+            }
+
+            // 深色模式切换
+            const darkModeToggle = document.getElementById('dark_mode');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('change', function() {
+                    if (this.checked) {
+                        body.classList.add('dark-mode');
+                        localStorage.setItem('darkMode', 'true');
+                    } else {
+                        body.classList.remove('dark-mode');
+                        localStorage.setItem('darkMode', 'false');
+                    }
+                });
+
+                // 检查深色模式状态
+                if (localStorage.getItem('darkMode') === 'true') {
+                    darkModeToggle.checked = true;
+                    body.classList.add('dark-mode');
+                }
+            }
+
+            // 字体大小调整
+            const fontSizeSlider = document.getElementById('fontSize');
+            if (fontSizeSlider) {
+                fontSizeSlider.addEventListener('input', function() {
+                    document.documentElement.style.fontSize = this.value + 'px';
+                    localStorage.setItem('fontSize', this.value);
+                });
+
+                // 应用保存的字体大小
+                const savedFontSize = localStorage.getItem('fontSize');
+                if (savedFontSize) {
+                    fontSizeSlider.value = savedFontSize;
+                    document.documentElement.style.fontSize = savedFontSize + 'px';
+                }
+            }
+
+            // 初始化时应用保存的主题
+            if (currentTheme && themes[currentTheme]) {
+                applyTheme(currentTheme);
+            }
+        });
+    </script>
+</body>
+</html> 

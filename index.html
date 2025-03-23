@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>政务办公系统 - 原型导航</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-800 text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo" class="w-12 h-12 mr-4">
+                    <div>
+                        <h1 class="text-2xl font-bold">政务办公系统</h1>
+                        <p class="text-blue-200 text-sm">高保真原型页面导航</p>
+                    </div>
+                </div>
+                <div>
+                    <a href="login.html" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-md text-white font-medium">
+                        进入登录页面
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">原型页面导航</h2>
+            <p class="text-gray-600">以下是政务办公系统的所有高保真原型页面，点击卡片查看对应页面。</p>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- 登录页面 -->
+            <a href="login.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-lg mb-4">
+                    <i class="fas fa-sign-in-alt text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">登录页面</h3>
+                <p class="text-gray-600 text-sm">系统登录入口，包含用户认证功能。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 个人工作台 -->
+            <a href="dashboard.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-green-100 text-green-600 rounded-lg mb-4">
+                    <i class="fas fa-tachometer-alt text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">个人工作台</h3>
+                <p class="text-gray-600 text-sm">用户主页面，展示工作概况和待办事项。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 公文处理 -->
+            <a href="document-flow.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-red-100 text-red-600 rounded-lg mb-4">
+                    <i class="fas fa-file-signature text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">公文处理</h3>
+                <p class="text-gray-600 text-sm">公文流转、审批和签发管理。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 文档管理 -->
+            <a href="document-mgmt.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-orange-100 text-orange-600 rounded-lg mb-4">
+                    <i class="fas fa-folder text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">文档管理</h3>
+                <p class="text-gray-600 text-sm">文档存储、分类和共享管理。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 会议管理 -->
+            <a href="meeting.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-teal-100 text-teal-600 rounded-lg mb-4">
+                    <i class="fas fa-calendar-alt text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">会议管理</h3>
+                <p class="text-gray-600 text-sm">会议预约、纪要和决策事项管理。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 通知公告 -->
+            <a href="announcement.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-pink-100 text-pink-600 rounded-lg mb-4">
+                    <i class="fas fa-bullhorn text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">通知公告</h3>
+                <p class="text-gray-600 text-sm">系统通知和公告发布管理。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 任务管理 -->
+            <a href="task.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-purple-100 text-purple-600 rounded-lg mb-4">
+                    <i class="fas fa-tasks text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">任务管理</h3>
+                <p class="text-gray-600 text-sm">任务分配、进度跟踪和甘特图展示。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 考勤管理 -->
+            <a href="attendance.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg mb-4">
+                    <i class="fas fa-user-clock text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">考勤管理</h3>
+                <p class="text-gray-600 text-sm">员工打卡、考勤记录和请假申请。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 组织架构 -->
+            <a href="organization.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg mb-4">
+                    <i class="fas fa-sitemap text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">组织架构</h3>
+                <p class="text-gray-600 text-sm">部门结构展示和人员信息管理。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+            
+            <!-- 系统设置 -->
+            <a href="settings.html" class="bg-white rounded-lg shadow-md p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-center w-12 h-12 bg-gray-100 text-gray-600 rounded-lg mb-4">
+                    <i class="fas fa-cog text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">系统设置</h3>
+                <p class="text-gray-600 text-sm">个人账户和系统参数设置。</p>
+                <div class="mt-4 text-blue-600 text-sm">查看页面 <i class="fas fa-arrow-right ml-1"></i></div>
+            </a>
+        </div>
+        
+        <div class="mt-12 bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">测试账号信息</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <div class="bg-gray-50 p-4 rounded-md">
+                        <h4 class="font-medium text-gray-700 mb-2">管理员账号</h4>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="text-gray-600">用户名：</div>
+                            <div class="font-medium">admin</div>
+                            <div class="text-gray-600">密码：</div>
+                            <div class="font-medium">admin123</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-blue-50 p-4 rounded-md">
+                        <h4 class="font-medium text-gray-700 mb-2">使用说明</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
+                            <li>点击上方卡片进入对应功能页面</li>
+                            <li>使用提供的测试账号登录系统</li>
+                            <li>可通过左侧导航栏在各功能间切换</li>
+                            <li>点击右上角头像可退出登录</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="bg-white py-6 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-600 text-sm">
+                <p>© 2025 政务办公系统 - 高保真原型</p>
+                <p class="mt-2">由前端技术团队开发</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

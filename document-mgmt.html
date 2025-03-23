@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文档管理 - 政务办公系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex min-h-screen">
+        <!-- 侧边栏导航 -->
+        <aside class="w-64 bg-blue-800 text-white shadow-lg hidden md:block">
+            <div class="p-4 border-b border-blue-700">
+                <div class="flex items-center">
+                    <img src="https://via.placeholder.com/40x40?text=Logo" alt="Logo" class="w-10 h-10 mr-3">
+                    <h1 class="text-xl font-bold">政务办公系统</h1>
+                </div>
+            </div>
+            <nav class="py-4">
+                <div class="px-4 py-2 text-blue-200 text-xs uppercase tracking-wider">主菜单</div>
+                <a href="dashboard.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tachometer-alt w-5 text-center mr-2"></i>
+                    <span>个人工作台</span>
+                </a>
+                <a href="document-flow.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-file-signature w-5 text-center mr-2"></i>
+                    <span>公文处理</span>
+                </a>
+                <a href="document-mgmt.html" class="flex items-center px-4 py-3 text-white bg-blue-900 bg-opacity-50">
+                    <i class="fas fa-folder w-5 text-center mr-2"></i>
+                    <span>文档管理</span>
+                </a>
+                <a href="meeting.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-calendar-alt w-5 text-center mr-2"></i>
+                    <span>会议管理</span>
+                </a>
+                <a href="announcement.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-bullhorn w-5 text-center mr-2"></i>
+                    <span>通知公告</span>
+                </a>
+                <a href="task.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tasks w-5 text-center mr-2"></i>
+                    <span>任务管理</span>
+                </a>
+                <a href="attendance.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-user-clock w-5 text-center mr-2"></i>
+                    <span>考勤管理</span>
+                </a>
+                <a href="organization.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-sitemap w-5 text-center mr-2"></i>
+                    <span>组织架构</span>
+                </a>
+                <a href="settings.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-cog w-5 text-center mr-2"></i>
+                    <span>系统设置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主要内容区域 -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between px-6 py-3">
+                    <div class="flex items-center">
+                        <button class="text-gray-500 focus:outline-none md:hidden">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h2 class="text-lg font-medium text-gray-800 ml-4">文档管理</h2>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="flex mx-4 text-gray-600 focus:outline-none">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="absolute top-0 right-0 h-4 w-4 mt-1 mr-2 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
+                        </button>
+                        <div class="relative">
+                            <button id="userMenuBtn" class="relative z-10 block h-8 w-8 rounded-full overflow-hidden focus:outline-none">
+                                <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Your avatar">
+                            </button>
+                            <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">账号设置</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">帮助中心</a>
+                                <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 内容区域 -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="container mx-auto">
+                    <!-- 操作栏 -->
+                    <div class="bg-white shadow-sm rounded-lg mb-6">
+                        <div class="p-6">
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                                <div class="flex gap-2">
+                                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
+                                        <i class="fas fa-upload mr-2"></i> 上传文档
+                                    </button>
+                                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center">
+                                        <i class="fas fa-folder-plus mr-2"></i> 新建文件夹
+                                    </button>
+                                </div>
+                                <div class="relative flex-grow md:flex-grow-0 md:w-64">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-search text-gray-500"></i>
+                                    </span>
+                                    <input class="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="搜索文档...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- 左侧文件夹树形结构 -->
+                        <div class="lg:w-1/4 bg-white shadow-sm rounded-lg">
+                            <div class="p-4 border-b border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-800">文件夹</h3>
+                            </div>
+                            <div class="p-4">
+                                <ul class="space-y-2">
+                                    <li>
+                                        <div class="flex items-center text-sm cursor-pointer py-1 text-blue-600 font-medium">
+                                            <i class="fas fa-folder-open mr-2"></i> 全部文档
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                            <i class="fas fa-folder mr-2"></i> 政策文件
+                                        </div>
+                                        <ul class="pl-6 mt-1 space-y-1">
+                                            <li class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                                <i class="fas fa-folder mr-2"></i> 中央政策
+                                            </li>
+                                            <li class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                                <i class="fas fa-folder mr-2"></i> 地方法规
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                            <i class="fas fa-folder mr-2"></i> 会议纪要
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                            <i class="fas fa-folder mr-2"></i> 报表文档
+                                        </div>
+                                        <ul class="pl-6 mt-1 space-y-1">
+                                            <li class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                                <i class="fas fa-folder mr-2"></i> 2025年季度报表
+                                            </li>
+                                            <li class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                                <i class="fas fa-folder mr-2"></i> 2024年报表
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                            <i class="fas fa-folder mr-2"></i> 工作计划
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                            <i class="fas fa-folder mr-2"></i> 资料共享
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center text-sm cursor-pointer py-1 hover:text-blue-600">
+                                            <i class="fas fa-folder mr-2"></i> 我的文档
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 右侧文件列表 -->
+                        <div class="lg:w-3/4 bg-white shadow-sm rounded-lg">
+                            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                <h3 class="text-lg font-medium text-gray-800">全部文档</h3>
+                                <div class="flex items-center space-x-2">
+                                    <div class="text-sm text-gray-600">
+                                        <select class="border border-gray-300 rounded-md px-2 py-1">
+                                            <option>按修改时间</option>
+                                            <option>按名称</option>
+                                            <option>按大小</option>
+                                            <option>按类型</option>
+                                        </select>
+                                    </div>
+                                    <div class="text-gray-500">
+                                        <button class="p-1 hover:text-blue-600">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+                                        <button class="p-1 text-blue-600">
+                                            <i class="fas fa-th-large"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-6">
+                                <!-- 导航路径 -->
+                                <div class="text-sm text-gray-600 mb-4">
+                                    <span class="hover:text-blue-600 cursor-pointer">全部文档</span>
+                                </div>
+
+                                <!-- 文件网格视图 -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                    <!-- 文件夹 -->
+                                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-blue-700 mb-3 text-center">
+                                            <i class="fas fa-folder text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1">政策文件</div>
+                                            <div class="text-xs text-gray-500">32 个文件</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-blue-700 mb-3 text-center">
+                                            <i class="fas fa-folder text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1">会议纪要</div>
+                                            <div class="text-xs text-gray-500">15 个文件</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-blue-700 mb-3 text-center">
+                                            <i class="fas fa-folder text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1">报表文档</div>
+                                            <div class="text-xs text-gray-500">27 个文件</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-blue-700 mb-3 text-center">
+                                            <i class="fas fa-folder text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1">工作计划</div>
+                                            <div class="text-xs text-gray-500">9 个文件</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 文件 -->
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-red-600 mb-3 text-center">
+                                            <i class="fas fa-file-pdf text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1 truncate">2025年政务工作规划.pdf</div>
+                                            <div class="text-xs text-gray-500">5.2 MB · 昨天</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-blue-600 mb-3 text-center">
+                                            <i class="fas fa-file-word text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1 truncate">第一季度工作总结.docx</div>
+                                            <div class="text-xs text-gray-500">1.8 MB · 3天前</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-green-600 mb-3 text-center">
+                                            <i class="fas fa-file-excel text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1 truncate">2025年预算表.xlsx</div>
+                                            <div class="text-xs text-gray-500">3.5 MB · 1周前</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-orange-600 mb-3 text-center">
+                                            <i class="fas fa-file-powerpoint text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1 truncate">政府工作汇报.pptx</div>
+                                            <div class="text-xs text-gray-500">7.2 MB · 1周前</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-gray-600 mb-3 text-center">
+                                            <i class="fas fa-file-image text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1 truncate">城市规划图.jpg</div>
+                                            <div class="text-xs text-gray-500">12.5 MB · 2周前</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-red-600 mb-3 text-center">
+                                            <i class="fas fa-file-pdf text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1 truncate">环保政策实施方案.pdf</div>
+                                            <div class="text-xs text-gray-500">4.1 MB · 2周前</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-blue-600 mb-3 text-center">
+                                            <i class="fas fa-file-word text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1 truncate">疫情防控工作指导.docx</div>
+                                            <div class="text-xs text-gray-500">2.3 MB · 3周前</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer">
+                                        <div class="text-yellow-600 mb-3 text-center">
+                                            <i class="fas fa-file-contract text-4xl"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-sm font-medium mb-1 truncate">城市建设项目合同.pdf</div>
+                                            <div class="text-xs text-gray-500">8.7 MB · 1个月前</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 分页 -->
+                                <div class="mt-6 flex items-center justify-between">
+                                    <div class="text-sm text-gray-700">
+                                        显示 <span class="font-medium">1</span> 到 <span class="font-medium">12</span> 项结果，共 <span class="font-medium">120</span> 项
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-3 py-1 rounded-md text-sm font-medium">
+                                            上一页
+                                        </button>
+                                        <button class="bg-blue-600 border border-blue-600 text-white px-3 py-1 rounded-md text-sm font-medium">
+                                            1
+                                        </button>
+                                        <button class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-3 py-1 rounded-md text-sm font-medium">
+                                            2
+                                        </button>
+                                        <button class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-3 py-1 rounded-md text-sm font-medium">
+                                            3
+                                        </button>
+                                        <button class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-3 py-1 rounded-md text-sm font-medium">
+                                            下一页
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn || isLoggedIn !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // 用户菜单交互
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (userMenuBtn && userMenu) {
+                userMenuBtn.addEventListener('click', function() {
+                    userMenu.classList.toggle('hidden');
+                });
+                
+                // 点击其他地方关闭菜单
+                document.addEventListener('click', function(event) {
+                    if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
+                        userMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // 退出登录
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('username');
+                    window.location.href = 'login.html';
+                });
+            }
+        });
+    </script>
+
+    <!-- 新建文件夹模态框 -->
+    <div id="newFolderModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">新建文件夹</h3>
+                <div class="mt-2">
+                    <input type="text" id="folderName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入文件夹名称">
+                </div>
+                <div class="mt-4 flex justify-end space-x-3">
+                    <button id="cancelNewFolder" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">取消</button>
+                    <button id="confirmNewFolder" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文件详情模态框 -->
+    <div id="fileDetailModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">文件详情</h3>
+                <div id="fileDetailContent" class="space-y-3">
+                    <!-- 文件详情内容将通过 JavaScript 动态填充 -->
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button id="closeFileDetail" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 当前文件夹路径
+        let currentPath = ['全部文档'];
+        
+        // 模拟文件系统数据结构
+        const fileSystem = {
+            '全部文档': {
+                type: 'folder',
+                children: {
+                    '政策文件': {
+                        type: 'folder',
+                        children: {
+                            '中央政策': { 
+                                type: 'folder', 
+                                children: {
+                                    '关于促进数字经济发展的指导意见.pdf': {
+                                        type: 'file',
+                                        size: '2.5 MB',
+                                        modifiedTime: '2024-03-15',
+                                        fileType: 'pdf'
+                                    },
+                                    '乡村振兴战略规划纲要.docx': {
+                                        type: 'file',
+                                        size: '1.8 MB',
+                                        modifiedTime: '2024-03-10',
+                                        fileType: 'docx'
+                                    }
+                                }
+                            },
+                            '地方法规': { 
+                                type: 'folder', 
+                                children: {
+                                    '城市发展规划2025.pdf': {
+                                        type: 'file',
+                                        size: '3.2 MB',
+                                        modifiedTime: '2024-03-12',
+                                        fileType: 'pdf'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '会议纪要': { 
+                        type: 'folder', 
+                        children: {
+                            '2024年第一季度工作会议纪要.docx': {
+                                type: 'file',
+                                size: '1.2 MB',
+                                modifiedTime: '2024-03-20',
+                                fileType: 'docx'
+                            },
+                            '项目推进会会议记录.pptx': {
+                                type: 'file',
+                                size: '2.1 MB',
+                                modifiedTime: '2024-03-18',
+                                fileType: 'pptx'
+                            }
+                        }
+                    },
+                    '报表文档': { 
+                        type: 'folder', 
+                        children: {
+                            '2025年季度报表': { 
+                                type: 'folder', 
+                                children: {
+                                    '第一季度财务报告.xlsx': {
+                                        type: 'file',
+                                        size: '1.5 MB',
+                                        modifiedTime: '2024-03-25',
+                                        fileType: 'xlsx'
+                                    }
+                                }
+                            },
+                            '2024年报表': { 
+                                type: 'folder', 
+                                children: {
+                                    '年度工作总结报告.docx': {
+                                        type: 'file',
+                                        size: '2.8 MB',
+                                        modifiedTime: '2024-03-22',
+                                        fileType: 'docx'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '工作计划': { 
+                        type: 'folder', 
+                        children: {
+                            '2024年部门工作计划.docx': {
+                                type: 'file',
+                                size: '1.1 MB',
+                                modifiedTime: '2024-03-28',
+                                fileType: 'docx'
+                            },
+                            '重点项目进度表.xlsx': {
+                                type: 'file',
+                                size: '0.8 MB',
+                                modifiedTime: '2024-03-26',
+                                fileType: 'xlsx'
+                            }
+                        }
+                    },
+                    '资料共享': { 
+                        type: 'folder', 
+                        children: {
+                            '培训资料': {
+                                type: 'folder',
+                                children: {
+                                    '新员工入职培训.pptx': {
+                                        type: 'file',
+                                        size: '4.2 MB',
+                                        modifiedTime: '2024-03-24',
+                                        fileType: 'pptx'
+                                    }
+                                }
+                            },
+                            '技术文档': {
+                                type: 'folder',
+                                children: {
+                                    '系统使用手册.pdf': {
+                                        type: 'file',
+                                        size: '3.5 MB',
+                                        modifiedTime: '2024-03-23',
+                                        fileType: 'pdf'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '我的文档': { 
+                        type: 'folder', 
+                        children: {
+                            '个人工作总结.docx': {
+                                type: 'file',
+                                size: '0.9 MB',
+                                modifiedTime: '2024-03-27',
+                                fileType: 'docx'
+                            },
+                            '出差报告.pdf': {
+                                type: 'file',
+                                size: '1.3 MB',
+                                modifiedTime: '2024-03-21',
+                                fileType: 'pdf'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // 更新导航路径显示
+        function updatePathDisplay() {
+            const pathElement = document.querySelector('.text-sm.text-gray-600');
+            pathElement.innerHTML = currentPath.map((folder, index) => {
+                if (index === currentPath.length - 1) {
+                    return `<span class="text-gray-900">${folder}</span>`;
+                }
+                return `<span class="hover:text-blue-600 cursor-pointer" data-path-index="${index}">${folder}</span> / `;
+            }).join('');
+        }
+
+        // 更新右侧标题
+        function updateTitle() {
+            const titleElement = document.querySelector('.lg\\/w-3\\/4 h3');
+            if (titleElement) {
+                titleElement.textContent = currentPath[currentPath.length - 1];
+            }
+        }
+
+        // 更新左侧文件夹选中状态
+        function updateFolderSelection() {
+            // 移除所有选中状态
+            document.querySelectorAll('.flex.items-center.text-sm.cursor-pointer').forEach(item => {
+                item.classList.remove('text-blue-600', 'font-medium');
+                item.classList.add('hover:text-blue-600');
+                
+                // 将所有文件夹图标改为常规文件夹
+                const icon = item.querySelector('i.fas');
+                if (icon) {
+                    icon.classList.remove('fa-folder-open');
+                    icon.classList.add('fa-folder');
+                }
+            });
+
+            // 首先设置"全部文档"的选中状态
+            if (currentPath.length === 1) {
+                const allDocsItem = document.querySelector('.flex.items-center.text-sm.cursor-pointer:first-child');
+                if (allDocsItem) {
+                    allDocsItem.classList.add('text-blue-600', 'font-medium');
+                    allDocsItem.classList.remove('hover:text-blue-600');
+                    const icon = allDocsItem.querySelector('i.fas');
+                    if (icon) {
+                        icon.classList.remove('fa-folder');
+                        icon.classList.add('fa-folder-open');
+                    }
+                }
+                return;
+            }
+
+            // 设置其他文件夹的选中状态
+            document.querySelectorAll('.flex.items-center.text-sm.cursor-pointer').forEach(item => {
+                const folderNameElement = item.querySelector('.text-sm');
+                if (!folderNameElement) return;
+                
+                const folderName = folderNameElement.textContent.trim();
+                // 如果当前路径包含这个文件夹名称
+                if (currentPath.includes(folderName)) {
+                    item.classList.add('text-blue-600', 'font-medium');
+                    item.classList.remove('hover:text-blue-600');
+                    
+                    // 将文件夹图标改为打开状态
+                    const icon = item.querySelector('i.fas');
+                    if (icon) {
+                        icon.classList.remove('fa-folder');
+                        icon.classList.add('fa-folder-open');
+                    }
+                }
+            });
+        }
+
+        // 更新文件列表显示
+        function updateFileList() {
+            let currentFolder = fileSystem;
+            for (const path of currentPath) {
+                currentFolder = currentFolder[path].children;
+            }
+
+            const gridContainer = document.querySelector('.grid');
+            gridContainer.innerHTML = '';
+
+            // 添加返回上级文件夹按钮
+            if (currentPath.length > 1) {
+                const backFolder = document.createElement('div');
+                backFolder.className = 'bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer';
+                backFolder.innerHTML = `
+                    <div class="text-blue-700 mb-3 text-center">
+                        <i class="fas fa-level-up-alt text-4xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-medium mb-1">返回上级</div>
+                    </div>
+                `;
+                backFolder.addEventListener('click', () => {
+                    currentPath.pop();
+                    updateFileList();
+                    updatePathDisplay();
+                    updateFolderSelection();
+                    updateTitle();
+                });
+                gridContainer.appendChild(backFolder);
+            }
+
+            // 显示当前文件夹内容
+            Object.entries(currentFolder).forEach(([name, item]) => {
+                const element = document.createElement('div');
+                
+                if (item.type === 'folder') {
+                    element.className = 'bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer';
+                    element.innerHTML = `
+                        <div class="text-blue-700 mb-3 text-center">
+                            <i class="fas fa-folder text-4xl"></i>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm font-medium mb-1">${name}</div>
+                            <div class="text-xs text-gray-500">${Object.keys(item.children).length} 个文件</div>
+                        </div>
+                    `;
+                    element.addEventListener('click', () => {
+                        currentPath.push(name);
+                        updateFileList();
+                        updatePathDisplay();
+                        updateFolderSelection();
+                        updateTitle();
+                    });
+                } else {
+                    // 根据文件类型显示不同的图标和颜色
+                    let iconClass = 'fas fa-file';
+                    let iconColor = 'text-blue-600';
+                    switch(item.fileType) {
+                        case 'pdf':
+                            iconClass = 'fas fa-file-pdf';
+                            iconColor = 'text-red-600';
+                            break;
+                        case 'docx':
+                            iconClass = 'fas fa-file-word';
+                            iconColor = 'text-blue-600';
+                            break;
+                        case 'xlsx':
+                            iconClass = 'fas fa-file-excel';
+                            iconColor = 'text-green-600';
+                            break;
+                        case 'pptx':
+                            iconClass = 'fas fa-file-powerpoint';
+                            iconColor = 'text-orange-600';
+                            break;
+                    }
+                    
+                    element.className = 'bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer';
+                    element.innerHTML = `
+                        <div class="${iconColor} mb-3 text-center">
+                            <i class="${iconClass} text-4xl"></i>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm font-medium mb-1">${name}</div>
+                            <div class="text-xs text-gray-500">${item.size} · ${item.modifiedTime}</div>
+                        </div>
+                    `;
+                    element.addEventListener('click', () => showFileDetail(name, item));
+                }
+                
+                gridContainer.appendChild(element);
+            });
+        }
+
+        // 显示文件详情
+        function showFileDetail(name, file) {
+            const modal = document.getElementById('fileDetailModal');
+            const content = document.getElementById('fileDetailContent');
+            content.innerHTML = `
+                <div class="space-y-2">
+                    <p><span class="font-medium">文件名：</span>${name}</p>
+                    <p><span class="font-medium">类型：</span>${file.fileType}</p>
+                    <p><span class="font-medium">大小：</span>${file.size || '未知'}</p>
+                    <p><span class="font-medium">修改时间：</span>${file.modifiedTime || '未知'}</p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        // 初始化事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            // 左侧文件夹导航点击事件
+            document.querySelectorAll('.flex.items-center.text-sm.cursor-pointer').forEach(item => {
+                item.addEventListener('click', function() {
+                    const folderName = this.querySelector('.text-sm').textContent.trim();
+                    if (folderName === '全部文档') {
+                        currentPath = ['全部文档'];
+                    } else {
+                        // 检查是否是子文件夹
+                        const parent = this.closest('ul').previousElementSibling;
+                        if (parent && parent.classList.contains('flex')) {
+                            const parentName = parent.querySelector('.text-sm').textContent.trim();
+                            currentPath = ['全部文档', parentName, folderName];
+                        } else {
+                            currentPath = ['全部文档', folderName];
+                        }
+                    }
+                    updateFileList();
+                    updatePathDisplay();
+                    updateFolderSelection();
+                    updateTitle();
+                });
+            });
+
+            // 面包屑导航点击事件
+            document.addEventListener('click', function(e) {
+                if (e.target.hasAttribute('data-path-index')) {
+                    const index = parseInt(e.target.dataset.pathIndex);
+                    if (!isNaN(index)) {
+                        currentPath = currentPath.slice(0, index + 1);
+                        updateFileList();
+                        updatePathDisplay();
+                        updateFolderSelection();
+                        updateTitle();
+                    }
+                }
+            });
+
+            // 新建文件夹按钮点击事件
+            const newFolderBtn = document.querySelector('.bg-green-600');
+            const newFolderModal = document.getElementById('newFolderModal');
+            const cancelNewFolder = document.getElementById('cancelNewFolder');
+            const confirmNewFolder = document.getElementById('confirmNewFolder');
+
+            newFolderBtn.addEventListener('click', () => {
+                newFolderModal.classList.remove('hidden');
+            });
+
+            cancelNewFolder.addEventListener('click', () => {
+                newFolderModal.classList.add('hidden');
+            });
+
+            confirmNewFolder.addEventListener('click', () => {
+                const folderName = document.getElementById('folderName').value.trim();
+                if (folderName) {
+                    let currentFolder = fileSystem;
+                    for (const path of currentPath) {
+                        currentFolder = currentFolder[path].children;
+                    }
+                    currentFolder[folderName] = { type: 'folder', children: {} };
+                    updateFileList();
+                    newFolderModal.classList.add('hidden');
+                    document.getElementById('folderName').value = '';
+                }
+            });
+
+            // 关闭文件详情模态框
+            document.getElementById('closeFileDetail').addEventListener('click', () => {
+                document.getElementById('fileDetailModal').classList.add('hidden');
+            });
+
+            // 初始化显示
+            updateFileList();
+            updatePathDisplay();
+            updateFolderSelection();
+            updateTitle();
+        });
+    </script>
+</body>
+</html> 

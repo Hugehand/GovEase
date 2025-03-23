@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务管理 - 政务办公系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gantt-container {
+            overflow-x: auto;
+        }
+        .gantt-header {
+            display: grid;
+            grid-template-columns: 250px repeat(31, 40px);
+        }
+        .gantt-row {
+            display: grid;
+            grid-template-columns: 250px repeat(31, 40px);
+        }
+        .gantt-task-bar {
+            position: absolute;
+            height: 24px;
+            border-radius: 4px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex min-h-screen">
+        <!-- 侧边栏导航 -->
+        <aside class="w-64 bg-blue-800 text-white shadow-lg hidden md:block">
+            <div class="p-4 border-b border-blue-700">
+                <div class="flex items-center">
+                    <img src="https://via.placeholder.com/40x40?text=Logo" alt="Logo" class="w-10 h-10 mr-3">
+                    <h1 class="text-xl font-bold">政务办公系统</h1>
+                </div>
+            </div>
+            <nav class="py-4">
+                <div class="px-4 py-2 text-blue-200 text-xs uppercase tracking-wider">主菜单</div>
+                <a href="dashboard.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-tachometer-alt w-5 text-center mr-2"></i>
+                    <span>个人工作台</span>
+                </a>
+                <a href="document-flow.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-file-signature w-5 text-center mr-2"></i>
+                    <span>公文处理</span>
+                </a>
+                <a href="document-mgmt.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-folder w-5 text-center mr-2"></i>
+                    <span>文档管理</span>
+                </a>
+                <a href="meeting.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-calendar-alt w-5 text-center mr-2"></i>
+                    <span>会议管理</span>
+                </a>
+                <a href="announcement.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-bullhorn w-5 text-center mr-2"></i>
+                    <span>通知公告</span>
+                </a>
+                <a href="task.html" class="flex items-center px-4 py-3 text-white bg-blue-900 bg-opacity-50">
+                    <i class="fas fa-tasks w-5 text-center mr-2"></i>
+                    <span>任务管理</span>
+                </a>
+                <a href="attendance.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-user-clock w-5 text-center mr-2"></i>
+                    <span>考勤管理</span>
+                </a>
+                <a href="organization.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-sitemap w-5 text-center mr-2"></i>
+                    <span>组织架构</span>
+                </a>
+                <a href="settings.html" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-700">
+                    <i class="fas fa-cog w-5 text-center mr-2"></i>
+                    <span>系统设置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主要内容区域 -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between px-6 py-3">
+                    <div class="flex items-center">
+                        <button class="text-gray-500 focus:outline-none md:hidden">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h2 class="text-lg font-medium text-gray-800 ml-4">任务管理</h2>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="flex mx-4 text-gray-600 focus:outline-none">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="absolute top-0 right-0 h-4 w-4 mt-1 mr-2 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
+                        </button>
+                        <div class="relative">
+                            <button id="userMenuBtn" class="relative z-10 block h-8 w-8 rounded-full overflow-hidden focus:outline-none">
+                                <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Your avatar">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 内容区域 -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="container mx-auto">
+                    <!-- 操作栏 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center shadow-sm">
+                                    <i class="fas fa-plus mr-2"></i> 新建任务
+                                </button>
+                                <div class="flex">
+                                    <button class="px-4 py-2 bg-blue-50 border border-blue-200 text-blue-600 rounded-l-md">列表视图</button>
+                                    <button class="px-4 py-2 hover:bg-gray-50 border-t border-b border-r border-gray-200 text-gray-700 rounded-r-md">甘特图</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center w-full md:w-auto">
+                                <div class="relative flex-grow md:flex-grow-0">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                                        <i class="fas fa-search text-gray-500"></i>
+                                    </span>
+                                    <input class="form-input w-full md:w-64 rounded-md pl-10 py-2 border border-gray-300" type="text" placeholder="搜索任务...">
+                                </div>
+                                <button class="ml-2 bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-md">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 任务统计卡片 -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-blue-100 text-blue-500 mr-4">
+                                    <i class="fas fa-clipboard-list text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">所有任务</p>
+                                    <p class="text-xl font-semibold text-gray-800">24</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-yellow-100 text-yellow-500 mr-4">
+                                    <i class="fas fa-spinner text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">进行中</p>
+                                    <p class="text-xl font-semibold text-gray-800">12</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-green-100 text-green-500 mr-4">
+                                    <i class="fas fa-check-circle text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">已完成</p>
+                                    <p class="text-xl font-semibold text-gray-800">8</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-red-100 text-red-500 mr-4">
+                                    <i class="fas fa-exclamation-circle text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">逾期</p>
+                                    <p class="text-xl font-semibold text-gray-800">4</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 任务列表 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-800">任务列表</h3>
+                            <div class="flex space-x-2">
+                                <select class="form-select text-sm border-gray-300 rounded-md">
+                                    <option>所有任务</option>
+                                    <option>我发起的</option>
+                                    <option>分配给我的</option>
+                                </select>
+                                <select class="form-select text-sm border-gray-300 rounded-md">
+                                    <option>所有状态</option>
+                                    <option>未开始</option>
+                                    <option>进行中</option>
+                                    <option>已完成</option>
+                                    <option>已逾期</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            任务名称
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            优先级
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            负责人
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            截止日期
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            状态
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            进度
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- 任务1 -->
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="text-sm font-medium text-gray-900">2025年度城市规划调整方案报告编写</div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                高
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                                <div class="ml-3">
+                                                    <div class="text-sm font-medium text-gray-900">李秘书</div>
+                                                    <div class="text-xs text-gray-500">城市规划部</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            2025-03-30
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                进行中
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 65%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-500">65%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-2">
+                                                <button class="text-blue-600 hover:text-blue-900">查看</button>
+                                                <button class="text-green-600 hover:text-green-900">编辑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- 任务2 -->
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="text-sm font-medium text-gray-900">第三季度财政预算报告准备</div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                中
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                                <div class="ml-3">
+                                                    <div class="text-sm font-medium text-gray-900">王财务</div>
+                                                    <div class="text-xs text-gray-500">财政部</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            2025-03-25
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                进行中
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-500">45%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-2">
+                                                <button class="text-blue-600 hover:text-blue-900">查看</button>
+                                                <button class="text-green-600 hover:text-green-900">编辑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- 任务3 -->
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="text-sm font-medium text-gray-900">新技术设备采购申请审批</div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                低
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                                <div class="ml-3">
+                                                    <div class="text-sm font-medium text-gray-900">赵技术</div>
+                                                    <div class="text-xs text-gray-500">信息技术部</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            2025-03-22
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                已逾期
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="bg-red-600 h-2.5 rounded-full" style="width: 30%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-500">30%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-2">
+                                                <button class="text-blue-600 hover:text-blue-900">查看</button>
+                                                <button class="text-green-600 hover:text-green-900">编辑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- 任务4 -->
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="text-sm font-medium text-gray-900">防疫工作部署会议准备</div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                高
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1565884280295-98eb83e41c65?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                                <div class="ml-3">
+                                                    <div class="text-sm font-medium text-gray-900">钱组长</div>
+                                                    <div class="text-xs text-gray-500">防疫工作组</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            2025-03-24
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                已完成
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 100%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-500">100%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-2">
+                                                <button class="text-blue-600 hover:text-blue-900">查看</button>
+                                                <button class="text-green-600 hover:text-green-900">编辑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- 分页 -->
+                        <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                            <div class="text-sm text-gray-500">
+                                显示 <span class="font-medium">1</span> 到 <span class="font-medium">4</span> 条，共 <span class="font-medium">24</span> 条记录
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">上一页</button>
+                                <button class="px-3 py-1 border border-gray-300 rounded-md bg-blue-50 text-blue-600 font-medium">1</button>
+                                <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">2</button>
+                                <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">3</button>
+                                <button class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">下一页</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 甘特图 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="p-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">任务甘特图（2025年3月）</h3>
+                        </div>
+                        <div class="p-4 overflow-x-auto">
+                            <div class="gantt-container" style="min-width: 1200px;">
+                                <!-- 甘特图头部 -->
+                                <div class="gantt-header mb-4">
+                                    <div class="px-4 py-2 font-medium text-gray-700">任务名称</div>
+                                    <!-- 日期头 -->
+                                    <div class="py-2 text-center text-xs text-gray-500">1</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">2</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">3</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">4</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">5</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">6</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">7</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">8</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">9</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">10</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">11</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">12</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">13</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">14</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">15</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">16</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">17</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">18</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">19</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">20</div>
+                                    <div class="py-2 text-center text-xs text-gray-500 bg-blue-50">21</div>
+                                    <div class="py-2 text-center text-xs text-gray-500 bg-blue-50">22</div>
+                                    <div class="py-2 text-center text-xs text-gray-500 bg-blue-50 font-bold">23</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">24</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">25</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">26</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">27</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">28</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">29</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">30</div>
+                                    <div class="py-2 text-center text-xs text-gray-500">31</div>
+                                </div>
+                                
+                                <!-- 甘特图行 -->
+                                <div class="gantt-row mb-4 relative h-10">
+                                    <div class="px-4 py-2 font-medium text-gray-700 flex items-center">2025年度城市规划调整方案报告编写</div>
+                                    <!-- 进度条 -->
+                                    <div class="col-span-31 absolute left-250 top-2" style="width: 440px;">
+                                        <div class="gantt-task-bar bg-blue-500" style="width: 440px;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="gantt-row mb-4 relative h-10">
+                                    <div class="px-4 py-2 font-medium text-gray-700 flex items-center">第三季度财政预算报告准备</div>
+                                    <!-- 进度条 -->
+                                    <div class="col-span-31 absolute left-250 top-2" style="width: 320px; left: 330px;">
+                                        <div class="gantt-task-bar bg-green-500" style="width: 320px;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="gantt-row mb-4 relative h-10">
+                                    <div class="px-4 py-2 font-medium text-gray-700 flex items-center">新技术设备采购申请审批</div>
+                                    <!-- 进度条 -->
+                                    <div class="col-span-31 absolute left-250 top-2" style="width: 240px; left: 410px;">
+                                        <div class="gantt-task-bar bg-red-500" style="width: 240px;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="gantt-row mb-4 relative h-10">
+                                    <div class="px-4 py-2 font-medium text-gray-700 flex items-center">防疫工作部署会议准备</div>
+                                    <!-- 进度条 -->
+                                    <div class="col-span-31 absolute left-250 top-2" style="width: 160px; left: 490px;">
+                                        <div class="gantt-task-bar bg-purple-500" style="width: 160px;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="gantt-row mb-4 relative h-10">
+                                    <div class="px-4 py-2 font-medium text-gray-700 flex items-center">季度工作总结会准备</div>
+                                    <!-- 进度条 -->
+                                    <div class="col-span-31 absolute left-250 top-2" style="width: 200px; left: 650px;">
+                                        <div class="gantt-task-bar bg-yellow-500" style="width: 200px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+        <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">账号设置</a>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">帮助中心</a>
+        <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+    </div>
+    <script>
+        // 模拟任务数据
+        const tasks = [
+            {
+                id: 1,
+                title: "2025年度城市规划调整方案报告编写",
+                priority: "高",
+                assignee: {
+                    name: "李秘书",
+                    department: "城市规划部",
+                    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                },
+                deadline: "2025-03-30",
+                status: "进行中",
+                progress: 65,
+                startDate: "2025-03-01",
+                endDate: "2025-03-30",
+                description: "编写2025年度城市规划调整方案报告，包括城市发展现状分析、未来规划建议等内容。",
+                attachments: [
+                    { name: "城市规划现状分析.pdf", size: "2.5 MB" },
+                    { name: "规划建议书.docx", size: "1.2 MB" }
+                ]
+            },
+            {
+                id: 2,
+                title: "第三季度财政预算报告准备",
+                priority: "中",
+                assignee: {
+                    name: "王财务",
+                    department: "财政部",
+                    avatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                },
+                deadline: "2025-03-25",
+                status: "进行中",
+                progress: 45,
+                startDate: "2025-03-10",
+                endDate: "2025-03-25",
+                description: "准备第三季度财政预算报告，包括各部门预算执行情况分析、资金使用效率评估等。",
+                attachments: [
+                    { name: "预算执行报告.xlsx", size: "1.8 MB" }
+                ]
+            },
+            {
+                id: 3,
+                title: "新技术设备采购申请审批",
+                priority: "低",
+                assignee: {
+                    name: "赵技术",
+                    department: "信息技术部",
+                    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                },
+                deadline: "2025-03-22",
+                status: "已逾期",
+                progress: 30,
+                startDate: "2025-03-15",
+                endDate: "2025-03-22",
+                description: "审批信息技术部提交的新技术设备采购申请，包括设备清单、预算明细等。",
+                attachments: [
+                    { name: "设备采购清单.pdf", size: "1.5 MB" }
+                ]
+            },
+            {
+                id: 4,
+                title: "防疫工作部署会议准备",
+                priority: "高",
+                assignee: {
+                    name: "钱组长",
+                    department: "防疫工作组",
+                    avatar: "https://images.unsplash.com/photo-1565884280295-98eb83e41c65?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                },
+                deadline: "2025-03-24",
+                status: "已完成",
+                progress: 100,
+                startDate: "2025-03-20",
+                endDate: "2025-03-24",
+                description: "准备防疫工作部署会议相关材料，包括疫情形势分析、防控措施建议等。",
+                attachments: [
+                    { name: "防疫工作方案.pdf", size: "2.0 MB" }
+                ]
+            },
+            {
+                id: 5,
+                title: "季度工作总结会准备",
+                priority: "中",
+                assignee: {
+                    name: "李秘书",
+                    department: "城市规划部",
+                    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                },
+                deadline: "2025-03-28",
+                status: "进行中",
+                progress: 75,
+                startDate: "2025-03-15",
+                endDate: "2025-03-28",
+                description: "准备第一季度工作总结会议材料，包括各部门工作完成情况、存在问题及改进建议等。",
+                attachments: [
+                    { name: "季度工作总结.pptx", size: "3.2 MB" }
+                ]
+            },
+            {
+                id: 6,
+                title: "年度档案整理归档",
+                priority: "低",
+                assignee: {
+                    name: "张档案",
+                    department: "档案室",
+                    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                },
+                deadline: "2025-03-20",
+                status: "已逾期",
+                progress: 40,
+                startDate: "2025-03-01",
+                endDate: "2025-03-20",
+                description: "整理2024年度各类文件档案，进行分类归档，建立电子档案库。",
+                attachments: [
+                    { name: "档案整理清单.xlsx", size: "1.0 MB" }
+                ]
+            },
+            {
+                id: 7,
+                title: "办公系统升级改造",
+                priority: "高",
+                assignee: {
+                    name: "赵技术",
+                    department: "信息技术部",
+                    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                },
+                deadline: "2025-03-25",
+                status: "已完成",
+                progress: 100,
+                startDate: "2025-03-01",
+                endDate: "2025-03-25",
+                description: "完成办公系统升级改造工作，包括系统架构优化、功能模块更新、性能提升等。",
+                attachments: [
+                    { name: "系统升级方案.pdf", size: "2.8 MB" },
+                    { name: "测试报告.docx", size: "1.5 MB" }
+                ]
+            },
+            {
+                id: 8,
+                title: "部门人员培训计划制定",
+                priority: "中",
+                assignee: {
+                    name: "王人事",
+                    department: "人事部",
+                    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                },
+                deadline: "2025-03-27",
+                status: "进行中",
+                progress: 60,
+                startDate: "2025-03-15",
+                endDate: "2025-03-27",
+                description: "制定2025年度部门人员培训计划，包括培训内容、时间安排、考核标准等。",
+                attachments: [
+                    { name: "培训计划草案.docx", size: "1.2 MB" }
+                ]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn || isLoggedIn !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // 用户菜单交互
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (userMenuBtn && userMenu) {
+                userMenuBtn.addEventListener('click', function() {
+                    userMenu.classList.toggle('hidden');
+                });
+                
+                document.addEventListener('click', function(event) {
+                    if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
+                        userMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // 退出登录
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('username');
+                    window.location.href = 'login.html';
+                });
+            }
+
+            // 新建任务按钮点击事件
+            const newTaskBtn = document.querySelector('button.bg-blue-600');
+            const newTaskModal = document.getElementById('newTaskModal');
+            const closeNewTaskModal = document.getElementById('closeNewTaskModal');
+            const cancelNewTask = document.getElementById('cancelNewTask');
+            const newTaskForm = document.getElementById('newTaskForm');
+
+            if (newTaskBtn && newTaskModal) {
+                newTaskBtn.addEventListener('click', () => {
+                    newTaskModal.classList.remove('hidden');
+                });
+
+                closeNewTaskModal.addEventListener('click', () => {
+                    newTaskModal.classList.add('hidden');
+                });
+
+                cancelNewTask.addEventListener('click', () => {
+                    newTaskModal.classList.add('hidden');
+                });
+
+                newTaskForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert('任务创建成功！');
+                    newTaskModal.classList.add('hidden');
+                });
+            }
+
+            // 视图切换功能
+            const viewButtons = document.querySelectorAll('.flex button');
+            const taskList = document.querySelector('.bg-white.rounded-lg.shadow-md.overflow-hidden.mb-6');
+            const ganttView = document.querySelector('.bg-white.rounded-lg.shadow-md.overflow-hidden:not(.mb-6)');
+
+            viewButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    viewButtons.forEach(b => b.classList.remove('bg-blue-50', 'border-blue-200', 'text-blue-600'));
+                    btn.classList.add('bg-blue-50', 'border-blue-200', 'text-blue-600');
+                    
+                    if (btn.textContent.trim() === '列表视图') {
+                        taskList.classList.remove('hidden');
+                        ganttView.classList.add('hidden');
+                    } else {
+                        taskList.classList.add('hidden');
+                        ganttView.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // 任务筛选功能
+            const filterButtons = document.querySelectorAll('.bg-white.rounded-lg.shadow-md.p-6');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filterText = btn.querySelector('p.text-sm').textContent;
+                    const taskRows = document.querySelectorAll('tbody tr');
+                    
+                    taskRows.forEach(row => {
+                        const status = row.querySelector('td:nth-child(5) span').textContent;
+                        if (filterText === '所有任务') {
+                            row.style.display = '';
+                        } else if (filterText === '进行中' && status === '进行中') {
+                            row.style.display = '';
+                        } else if (filterText === '已完成' && status === '已完成') {
+                            row.style.display = '';
+                        } else if (filterText === '逾期' && status === '已逾期') {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    // 更新任务统计数字
+                    const visibleTasks = document.querySelectorAll('tbody tr:not([style*="display: none"])').length;
+                    const taskCount = btn.querySelector('p.text-xl');
+                    if (taskCount) {
+                        taskCount.textContent = visibleTasks;
+                    }
+                });
+            });
+
+            // 任务操作功能（查看、编辑）
+            const taskViewButtons = document.querySelectorAll('button.text-blue-600');
+            const taskEditButtons = document.querySelectorAll('button.text-green-600');
+            
+            if (!document.getElementById('taskDetailModal')) {
+                // 创建任务详情模态框
+                const taskDetailModalHTML = `
+                <div id="taskDetailModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+                    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                        <div class="mt-3">
+                            <div class="flex justify-between items-center border-b pb-3">
+                                <h3 class="text-xl font-medium text-gray-900">任务详情</h3>
+                                <button class="text-gray-400 hover:text-gray-500" id="closeTaskDetailModal">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="p-6">
+                                <!-- 任务详情内容将通过JavaScript动态填充 -->
+                            </div>
+                            <div class="mt-6 flex justify-end space-x-3 px-6 pb-4">
+                                <button type="button" id="closeDetailBtn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', taskDetailModalHTML);
+            }
+            
+            if (!document.getElementById('editTaskModal')) {
+                // 创建编辑任务模态框
+                const editTaskModalHTML = `
+                <div id="editTaskModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+                    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                        <div class="mt-3">
+                            <div class="flex justify-between items-center border-b pb-3">
+                                <h3 class="text-xl font-medium text-gray-900">编辑任务</h3>
+                                <button class="text-gray-400 hover:text-gray-500" id="closeEditTaskModal">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="mt-4">
+                                <form id="editTaskForm">
+                                    <div class="space-y-4 px-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">任务名称</label>
+                                            <input type="text" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">优先级</label>
+                                            <select name="priority" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                <option value="高">高</option>
+                                                <option value="中">中</option>
+                                                <option value="低">低</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">截止日期</label>
+                                            <input type="date" name="deadline" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">状态</label>
+                                            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                <option value="未开始">未开始</option>
+                                                <option value="进行中">进行中</option>
+                                                <option value="已完成">已完成</option>
+                                                <option value="已逾期">已逾期</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">进度</label>
+                                            <input type="range" name="progress" min="0" max="100" class="w-full">
+                                            <span class="text-sm text-gray-500">0%</span>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">任务描述</label>
+                                            <textarea name="description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 flex justify-end space-x-3 px-4">
+                                        <button type="button" id="cancelEditTask" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">取消</button>
+                                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', editTaskModalHTML);
+            }
+            
+            taskViewButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const taskRow = btn.closest('tr');
+                    const taskTitle = taskRow.querySelector('td:nth-child(1) div').textContent;
+                    const task = tasks.find(t => t.title === taskTitle);
+                    
+                    if (task) {
+                        const taskDetailModal = document.getElementById('taskDetailModal');
+                        const detailTitle = taskDetailModal.querySelector('h3');
+                        const detailContent = taskDetailModal.querySelector('.p-6');
+                        
+                        detailTitle.textContent = task.title;
+                        detailContent.innerHTML = `
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <span class="text-gray-600 w-24">优先级：</span>
+                                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-${task.priority === '高' ? 'red' : task.priority === '中' ? 'yellow' : 'green'}-100 text-${task.priority === '高' ? 'red' : task.priority === '中' ? 'yellow' : 'green'}-800">
+                                        ${task.priority}
+                                    </span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-600 w-24">负责人：</span>
+                                    <span>${task.assignee.name}（${task.assignee.department}）</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-600 w-24">截止日期：</span>
+                                    <span>${task.deadline}</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-600 w-24">状态：</span>
+                                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-${task.status === '进行中' ? 'yellow' : task.status === '已完成' ? 'green' : 'red'}-100 text-${task.status === '进行中' ? 'yellow' : task.status === '已完成' ? 'green' : 'red'}-800">
+                                        ${task.status}
+                                    </span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-600 w-24">进度：</span>
+                                    <div class="flex-1">
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${task.progress}%"></div>
+                                        </div>
+                                        <span class="text-xs text-gray-500">${task.progress}%</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="text-gray-600">任务描述：</span>
+                                    <p class="mt-1 text-gray-700">${task.description}</p>
+                                </div>
+                                ${task.attachments.length > 0 ? `
+                                    <div>
+                                        <span class="text-gray-600">附件：</span>
+                                        <div class="mt-2 space-y-2">
+                                            ${task.attachments.map(att => `
+                                                <div class="flex items-center p-2 bg-gray-50 rounded">
+                                                    <i class="fas fa-file-pdf text-red-500 mr-2"></i>
+                                                    <span class="text-sm">${att.name}</span>
+                                                    <span class="text-xs text-gray-500 ml-2">${att.size}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                        
+                        taskDetailModal.classList.remove('hidden');
+                        
+                        // 添加关闭按钮事件监听
+                        const closeDetailBtn = document.getElementById('closeDetailBtn');
+                        if (closeDetailBtn) {
+                            closeDetailBtn.addEventListener('click', () => {
+                                taskDetailModal.classList.add('hidden');
+                            });
+                        }
+                        
+                        const closeTaskDetailModal = document.getElementById('closeTaskDetailModal');
+                        if (closeTaskDetailModal) {
+                            closeTaskDetailModal.addEventListener('click', () => {
+                                taskDetailModal.classList.add('hidden');
+                            });
+                        }
+                    }
+                });
+            });
+            
+            taskEditButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const taskRow = btn.closest('tr');
+                    const taskTitle = taskRow.querySelector('td:nth-child(1) div').textContent;
+                    const task = tasks.find(t => t.title === taskTitle);
+                    
+                    if (task) {
+                        const editTaskModal = document.getElementById('editTaskModal');
+                        const editForm = document.getElementById('editTaskForm');
+                        
+                        // 填充表单数据
+                        editForm.querySelector('input[name="title"]').value = task.title;
+                        editForm.querySelector('select[name="priority"]').value = task.priority;
+                        editForm.querySelector('input[name="deadline"]').value = task.deadline.split('-').join('-');
+                        editForm.querySelector('select[name="status"]').value = task.status;
+                        
+                        const progressInput = editForm.querySelector('input[name="progress"]');
+                        progressInput.value = task.progress;
+                        progressInput.nextElementSibling.textContent = task.progress + '%';
+                        
+                        // 进度条事件监听
+                        progressInput.addEventListener('input', function() {
+                            this.nextElementSibling.textContent = this.value + '%';
+                        });
+                        
+                        editForm.querySelector('textarea[name="description"]').value = task.description;
+                        
+                        editTaskModal.classList.remove('hidden');
+                        
+                        // 添加关闭和取消按钮事件监听
+                        const cancelEditTask = document.getElementById('cancelEditTask');
+                        if (cancelEditTask) {
+                            cancelEditTask.addEventListener('click', () => {
+                                editTaskModal.classList.add('hidden');
+                            });
+                        }
+                        
+                        const closeEditTaskModal = document.getElementById('closeEditTaskModal');
+                        if (closeEditTaskModal) {
+                            closeEditTaskModal.addEventListener('click', () => {
+                                editTaskModal.classList.add('hidden');
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // 表单提交事件
+            document.getElementById('editTaskForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('任务更新成功！');
+                document.getElementById('editTaskModal').classList.add('hidden');
+            });
+
+            // 移除原有的冗余事件监听
+            document.querySelectorAll('[id^="close"]').forEach(btn => {
+                btn.removeEventListener('click', () => {});
+            });
+            
+            document.querySelectorAll('[id^="cancel"]').forEach(btn => {
+                btn.removeEventListener('click', () => {});
+            });
+        });
+    </script>
+
+    <!-- 新建任务模态框 -->
+    <div id="newTaskModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="text-xl font-medium text-gray-900">新建任务</h3>
+                    <button class="text-gray-400 hover:text-gray-500" id="closeNewTaskModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="mt-4">
+                    <form id="newTaskForm">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">任务名称</label>
+                                <input type="text" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">优先级</label>
+                                <select name="priority" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="高">高</option>
+                                    <option value="中">中</option>
+                                    <option value="低">低</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">负责人</label>
+                                <select name="assignee" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="1">李秘书（城市规划部）</option>
+                                    <option value="2">王财务（财政部）</option>
+                                    <option value="3">赵技术（信息技术部）</option>
+                                    <option value="4">钱组长（防疫工作组）</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">截止日期</label>
+                                <input type="date" name="deadline" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">任务描述</label>
+                                <textarea name="description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">附件</label>
+                                <input type="file" name="attachments" multiple class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <button type="button" id="cancelNewTask" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">取消</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">创建</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
