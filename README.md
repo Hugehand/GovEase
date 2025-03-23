@@ -220,18 +220,15 @@ Developing and maintaining this Government Office Automation System requires sig
 4. **捐赠支持** - 如果您想提供资金支持，可以通过以下方式：
    **Financial support** - If you'd like to provide financial support, you can do so via:
 
-   - WeChat Pay: [扫描微信支付二维码]
-   - Alipay: [扫描支付宝二维码]
-   - PayPal: developer@gov-system.example.com
+   - WeChat Pay:
+   
 
 ### 联系作者 (Contact the Author)
 
 如有任何问题或合作意向，请通过以下方式联系我们：
 For any questions or collaboration opportunities, please contact us via:
 
-- Email: developer@gov-system.example.com
-- WeChat: GovSystem-Dev
-- GitHub: github.com/example/government-office-system
+- WeChat: vbvihgfuqimjmj
 
 感谢您的支持！
 Thank you for your support!
